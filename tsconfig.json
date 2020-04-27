@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "noImplicitAny": false,
+    "removeComments": true,
+    "allowJs": true,
+    "outDir": "dist"
+  },
+  "files": ["src/scorm-api-wrapper.js"]
+}

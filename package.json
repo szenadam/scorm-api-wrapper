@@ -1,0 +1,14 @@
+{
+  "name": "scorm-api-wrapper",
+  "version": "1.0.0",
+  "description": "SCORM API Wrapper",
+  "main": "scorm-api-wrapper.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "szenadam",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  }
+}
