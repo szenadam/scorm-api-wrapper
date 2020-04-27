@@ -1,4 +1,4 @@
-var ScormApiWrapper = {}; //ScormApiWrapper 'namespace' helps ensure no conflicts with possible other "SCORM" variables
+var ScormApiWrapper: any = {}; //ScormApiWrapper 'namespace' helps ensure no conflicts with possible other "SCORM" variables
 
 ScormApiWrapper.UTILS = {}; //For holding UTILS functions
 ScormApiWrapper.debug = { isActive: true }; //Enable (true) or disable (false) for debug mode

@@ -6,5 +6,5 @@
     "allowJs": true,
     "outDir": "dist"
   },
-  "files": ["src/scorm-api-wrapper.js"]
+  "files": ["src/scorm-api-wrapper.ts"]
 }
