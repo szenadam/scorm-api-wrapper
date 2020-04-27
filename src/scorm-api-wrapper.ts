@@ -1,4 +1,5 @@
-var ScormApiWrapper: any = {}; //ScormApiWrapper 'namespace' helps ensure no conflicts with possible other "SCORM" variables
+//ScormApiWrapper 'namespace' helps ensure no conflicts with possible other "SCORM" variables
+var ScormApiWrapper: any = {};
 
 ScormApiWrapper.UTILS = {}; //For holding UTILS functions
 ScormApiWrapper.debug = { isActive: true }; //Enable (true) or disable (false) for debug mode
@@ -20,15 +21,13 @@ ScormApiWrapper.SCORM = {
   debug: {}, //Create debug child object
 };
 
-/* --------------------------------------------------------------------------------
-     ScormApiWrapper.SCORM.isAvailable
-     A simple function to allow Flash ExternalInterface to confirm
-     presence of JS wrapper before attempting any LMS communication.
-
-     Parameters: none
-     Returns:    Boolean (true)
-  ----------------------------------------------------------------------------------- */
-
+/**
+ * ScormApiWrapper.SCORM.isAvailable
+ *
+ * A simple function to allow Flash ExternalInterface to confirm
+ * presence of JS wrapper before attempting any LMS communication.
+ * @returns {boolean} true
+ */
 ScormApiWrapper.SCORM.isAvailable = function () {
   return true;
 };
@@ -37,14 +36,13 @@ ScormApiWrapper.SCORM.isAvailable = function () {
 // --- SCORM.API functions ------------------------------------------------- //
 // ------------------------------------------------------------------------- //
 
-/* -------------------------------------------------------------------------
-     ScormApiWrapper.SCORM.API.find(window)
-     Looks for an object named API in parent and opener windows
-
-     Parameters: window (the browser window object).
-     Returns:    Object if API is found, null if no API found
-  ---------------------------------------------------------------------------- */
-
+/**
+ * ScormApiWrapper.SCORM.API.find(window)
+ *
+ * Looks for an object named API in parent and opener windows
+ * @param {object} window the browser window object
+ * @returns {object|null} object if API is found, null if no API found
+ */
 ScormApiWrapper.SCORM.API.find = function (win) {
   var API = null,
     findAttempts = 0,
@@ -123,16 +121,14 @@ ScormApiWrapper.SCORM.API.find = function (win) {
   return API;
 };
 
-/* -------------------------------------------------------------------------
-     ScormApiWrapper.SCORM.API.get()
-     Looks for an object named API, first in the current window's frame
-     hierarchy and then, if necessary, in the current window's opener window
-     hierarchy (if there is an opener window).
-
-     Parameters:  None.
-     Returns:     Object if API found, null if no API found
-  ---------------------------------------------------------------------------- */
-
+/**
+ * ScormApiWrapper.SCORM.API.get()
+ *
+ * Looks for an object named API, first in the current window's frame
+ * hierarchy and then, if necessary, in the current window's opener window
+ * hierarchy (if there is an opener window).
+ * @returns {object|null} Object if API found, null if no API found
+ */
 ScormApiWrapper.SCORM.API.get = function () {
   var API = null,
     win = window,
@@ -165,14 +161,12 @@ ScormApiWrapper.SCORM.API.get = function () {
   return API;
 };
 
-/* -------------------------------------------------------------------------
-     ScormApiWrapper.SCORM.API.getHandle()
-     Returns the handle to API object if it was previously set
-
-     Parameters:  None.
-     Returns:     Object (the ScormApiWrapper.SCORM.API.handle variable).
-  ---------------------------------------------------------------------------- */
-
+/**
+ * ScormApiWrapper.SCORM.API.getHandle()
+ *
+ * Returns the handle to API object if it was previously set
+ * @returns {object} obj the ScormApiWrapper.SCORM.API.handle variable
+ */
 ScormApiWrapper.SCORM.API.getHandle = function () {
   var API = ScormApiWrapper.SCORM.API;
 
@@ -184,17 +178,15 @@ ScormApiWrapper.SCORM.API.getHandle = function () {
 };
 
 // ------------------------------------------------------------------------- //
-// --- ScormApiWrapper.SCORM.connection functions --------------------------------- //
+// --- ScormApiWrapper.SCORM.connection functions -------------------------- //
 // ------------------------------------------------------------------------- //
 
-/* -------------------------------------------------------------------------
-     ScormApiWrapper.SCORM.connection.initialize()
-     Tells the LMS to initiate the communication session.
-
-     Parameters:  None
-     Returns:     Boolean
-  ---------------------------------------------------------------------------- */
-
+/**
+ * ScormApiWrapper.SCORM.connection.initialize()
+ *
+ * Tells the LMS to initiate the communication session.
+ * @returns {boolean}
+ */
 ScormApiWrapper.SCORM.connection.initialize = function () {
   var success = false,
     scorm = ScormApiWrapper.SCORM,
@@ -290,14 +282,12 @@ ScormApiWrapper.SCORM.connection.initialize = function () {
   return success;
 };
 
-/* -------------------------------------------------------------------------
-     ScormApiWrapper.SCORM.connection.terminate()
-     Tells the LMS to terminate the communication session
-
-     Parameters:  None
-     Returns:     Boolean
-  ---------------------------------------------------------------------------- */
-
+/**
+ * ScormApiWrapper.SCORM.connection.terminate()
+ *
+ * Tells the LMS to terminate the communication session
+ * @returns {boolean}
+ */
 ScormApiWrapper.SCORM.connection.terminate = function () {
   var success = false,
     scorm = ScormApiWrapper.SCORM,
@@ -372,17 +362,16 @@ ScormApiWrapper.SCORM.connection.terminate = function () {
 };
 
 // ------------------------------------------------------------------------- //
-// --- ScormApiWrapper.SCORM.data functions --------------------------------------- //
+// --- ScormApiWrapper.SCORM.data functions -------------------------------- //
 // ------------------------------------------------------------------------- //
 
-/* -------------------------------------------------------------------------
-     ScormApiWrapper.SCORM.data.get(parameter)
-     Requests information from the LMS.
-
-     Parameter: parameter (string, name of the SCORM data model element)
-     Returns:   string (the value of the specified data model element)
-  ---------------------------------------------------------------------------- */
-
+/**
+ * ScormApiWrapper.SCORM.data.get(parameter)
+ *
+ * Requests information from the LMS.
+ * @param {string} parameter name of the SCORM data model element
+ * @returns {string} the value of the specified data model element
+ */
 ScormApiWrapper.SCORM.data.get = function (parameter) {
   var value = null,
     scorm = ScormApiWrapper.SCORM,
@@ -444,18 +433,16 @@ ScormApiWrapper.SCORM.data.get = function (parameter) {
   return String(value);
 };
 
-/* -------------------------------------------------------------------------
-     ScormApiWrapper.SCORM.data.set()
-     Tells the LMS to assign the value to the named data model element.
-     Also stores the SCO's completion status in a variable named
-     ScormApiWrapper.SCORM.data.completionStatus. This variable is checked whenever
-     ScormApiWrapper.SCORM.connection.terminate() is invoked.
-
-     Parameters: parameter (string). The data model element
-                 value (string). The value for the data model element
-     Returns:    Boolean
-  ---------------------------------------------------------------------------- */
-
+/**
+ * ScormApiWrapper.SCORM.data.set()
+ *
+ * Tells the LMS to assign the value to the named data model element.
+ * Also stores the SCO's completion status in a variable named
+ * ScormApiWrapper.SCORM.data.completionStatus. This variable is checked whenever
+ * ScormApiWrapper.SCORM.connection.terminate() is invoked.
+ * @param {string} parameter The data model element
+ * @param {string} value The value for the data model element
+ */
 ScormApiWrapper.SCORM.data.set = function (parameter, value) {
   var success = false,
     scorm = ScormApiWrapper.SCORM,
@@ -508,14 +495,12 @@ ScormApiWrapper.SCORM.data.set = function (parameter, value) {
   return success;
 };
 
-/* -------------------------------------------------------------------------
-     ScormApiWrapper.SCORM.data.save()
-     Instructs the LMS to persist all data to this point in the session
-
-     Parameters: None
-     Returns:    Boolean
-  ---------------------------------------------------------------------------- */
-
+/**
+ * ScormApiWrapper.SCORM.data.save()
+ *
+ * Instructs the LMS to persist all data to this point in the session
+ * @returns {boolean}
+ */
 ScormApiWrapper.SCORM.data.save = function () {
   var success = false,
     scorm = ScormApiWrapper.SCORM,
@@ -589,17 +574,15 @@ ScormApiWrapper.SCORM.status = function (action, status) {
 };
 
 // ------------------------------------------------------------------------- //
-// --- ScormApiWrapper.SCORM.debug functions -------------------------------------- //
+// --- ScormApiWrapper.SCORM.debug functions ------------------------------- //
 // ------------------------------------------------------------------------- //
 
-/* -------------------------------------------------------------------------
-     ScormApiWrapper.SCORM.debug.getCode
-     Requests the error code for the current error state from the LMS
-
-     Parameters: None
-     Returns:    Integer (the last error code).
-  ---------------------------------------------------------------------------- */
-
+/**
+ * ScormApiWrapper.SCORM.debug.getCode
+ *
+ * Requests the error code for the current error state from the LMS
+ * @returns {number} the last error code
+ */
 ScormApiWrapper.SCORM.debug.getCode = function () {
   var scorm = ScormApiWrapper.SCORM,
     API = scorm.API.getHandle(),
@@ -622,15 +605,14 @@ ScormApiWrapper.SCORM.debug.getCode = function () {
   return code;
 };
 
-/* -------------------------------------------------------------------------
-     ScormApiWrapper.SCORM.debug.getInfo()
-     "Used by a SCO to request the textual description for the error code
-     specified by the value of [errorCode]."
-
-     Parameters: errorCode (integer).
-     Returns:    String.
-  ----------------------------------------------------------------------------- */
-
+/**
+ * ScormApiWrapper.SCORM.debug.getInfo()
+ *
+ * "Used by a SCO to request the textual description for the error code
+ * specified by the value of [errorCode]."
+ * @param {number} errorCode
+ * @returns {string}
+ */
 ScormApiWrapper.SCORM.debug.getInfo = function (errorCode) {
   var scorm = ScormApiWrapper.SCORM,
     API = scorm.API.getHandle(),
@@ -653,15 +635,14 @@ ScormApiWrapper.SCORM.debug.getInfo = function (errorCode) {
   return String(result);
 };
 
-/* -------------------------------------------------------------------------
-     ScormApiWrapper.SCORM.debug.getDiagnosticInfo
-     "Exists for LMS specific use. It allows the LMS to define additional
-     diagnostic information through the API Instance."
-
-     Parameters: errorCode (integer).
-     Returns:    String (Additional diagnostic information about the given error code).
-  ---------------------------------------------------------------------------- */
-
+/**
+ * ScormApiWrapper.SCORM.debug.getDiagnosticInfo
+ *
+ * "Exists for LMS specific use. It allows the LMS to define additional
+ * diagnostic information through the API Instance."
+ * @param {number} errorCode
+ * @returns {string} Additional diagnostic information about the given error code
+ */
 ScormApiWrapper.SCORM.debug.getDiagnosticInfo = function (errorCode) {
   var scorm = ScormApiWrapper.SCORM,
     API = scorm.API.getHandle(),
@@ -689,7 +670,6 @@ ScormApiWrapper.SCORM.debug.getDiagnosticInfo = function (errorCode) {
 // ------------------------------------------------------------------------- //
 
 // Because nobody likes typing verbose code.
-
 ScormApiWrapper.SCORM.init = ScormApiWrapper.SCORM.connection.initialize;
 ScormApiWrapper.SCORM.get = ScormApiWrapper.SCORM.data.get;
 ScormApiWrapper.SCORM.set = ScormApiWrapper.SCORM.data.set;
@@ -697,19 +677,17 @@ ScormApiWrapper.SCORM.save = ScormApiWrapper.SCORM.data.save;
 ScormApiWrapper.SCORM.quit = ScormApiWrapper.SCORM.connection.terminate;
 
 // ------------------------------------------------------------------------- //
-// --- ScormApiWrapper.UTILS functions -------------------------------------------- //
+// --- ScormApiWrapper.UTILS functions ------------------------------------- //
 // ------------------------------------------------------------------------- //
 
-/* -------------------------------------------------------------------------
-     ScormApiWrapper.UTILS.StringToBoolean()
-     Converts 'boolean strings' into actual valid booleans.
-
-     (Most values returned from the API are the strings "true" and "false".)
-
-     Parameters: String
-     Returns:    Boolean
-  ---------------------------------------------------------------------------- */
-
+/**
+ * ScormApiWrapper.UTILS.StringToBoolean()
+ *
+ * Converts 'boolean strings' into actual valid booleans.
+ * (Most values returned from the API are the strings "true" and "false".)
+ * @param {string} value
+ * @returns {boolean}
+ */
 ScormApiWrapper.UTILS.StringToBoolean = function (value) {
   var t = typeof value;
   switch (t) {
@@ -729,14 +707,13 @@ ScormApiWrapper.UTILS.StringToBoolean = function (value) {
   }
 };
 
-/* -------------------------------------------------------------------------
-     ScormApiWrapper.UTILS.trace()
-     Displays error messages when in debug mode.
-
-     Parameters: msg (string)
-     Return:     None
-  ---------------------------------------------------------------------------- */
-
+/**
+ * ScormApiWrapper.UTILS.trace()
+ *
+ * Displays error messages when in debug mode.
+ * @param {string} msg
+ * @returns {void}
+ */
 ScormApiWrapper.UTILS.trace = function (msg) {
   if (ScormApiWrapper.debug.isActive) {
     if (window.console && window.console.log) {
