@@ -4,11 +4,16 @@
   "description": "SCORM API Wrapper",
   "main": "scorm-api-wrapper.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jasmine --reporter=jasmine-console-reporter --config=jasmine.json"
   },
   "author": "szenadam",
   "license": "MIT",
   "devDependencies": {
+    "@types/jasmine": "^3.5.10",
+    "jasmine": "^3.5.0",
+    "jasmine-console-reporter": "^3.1.0",
+    "ts-node": "^8.9.1",
     "typescript": "^3.8.3"
   }
 }
