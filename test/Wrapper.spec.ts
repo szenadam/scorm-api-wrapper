@@ -2,8 +2,13 @@ import "jasmine";
 import Wrapper from "../src/Wrapper";
 
 describe("Wrapper", () => {
-  it("Debug mode should be set to true", () => {
-    let wrapper = new Wrapper(true)
+  it("debug mode should be set to true", () => {
+    let wrapper = new Wrapper(true, null)
     expect(wrapper.debug).toBe(true);
+  });
+
+  it("should set scorm version to null initially", () => {
+    let wrapper = new Wrapper(true, null);
+    expect(wrapper.version).toBeNull();
   });
 });
