@@ -16,4 +16,9 @@ describe("Wrapper", () => {
     let wrapper = new Wrapper(true);
     expect(wrapper.handleCompletionStatus).toBeTrue();
   });
+  
+  it("should set handleExitMode to true initially", () => {
+    let wrapper = new Wrapper(true);
+    expect(wrapper.handleExitMode).toBeTrue();
+  });
 });
