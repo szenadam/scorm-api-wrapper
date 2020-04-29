@@ -9,6 +9,6 @@ describe("Wrapper", () => {
 
   it("should set scorm version to null initially", () => {
     let wrapper = new Wrapper(true, null);
-    expect(wrapper.version).toBeNull();
+    expect(wrapper.scormVersion).toBeNull();
   });
 });

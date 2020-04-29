@@ -1,10 +1,10 @@
 class Wrapper {
   public debug: boolean;
-  public version: any;
+  public scormVersion: any;
 
-  constructor(debug: boolean, version: any) {
+  constructor(debug: boolean, scormVersion: any) {
     this.debug = debug;
-    this.version = version;
+    this.scormVersion = scormVersion;
   }
 }
 
