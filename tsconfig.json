@@ -3,7 +3,8 @@
     "module": "CommonJS",
     "noImplicitAny": false,
     "removeComments": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "strict": true
   },
   "files": ["src/ScormApiWrapper.ts"]
 }
