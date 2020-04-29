@@ -1,4 +1,4 @@
-class Wrapper {
+class ScormApiWrapper {
   public apiHandle: any;
   public scormVersion: any;
 
@@ -21,4 +21,4 @@ class Wrapper {
   }
 }
 
-export default Wrapper;
+export default ScormApiWrapper;

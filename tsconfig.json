@@ -5,5 +5,5 @@
     "removeComments": true,
     "outDir": "dist"
   },
-  "files": ["src/scorm-api-wrapper.ts"]
+  "files": ["src/ScormApiWrapper.ts"]
 }
