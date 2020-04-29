@@ -21,4 +21,10 @@ describe("Wrapper", () => {
     let wrapper = new Wrapper(true);
     expect(wrapper.handleExitMode).toBeTrue();
   });
+  
+  it("should set apiHandle to null initially", () => {
+    let wrapper = new Wrapper(true);
+    expect(wrapper.apiHandle).toBeNull();
+  });
+
 });
