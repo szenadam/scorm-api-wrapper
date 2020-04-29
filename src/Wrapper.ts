@@ -5,6 +5,7 @@ class Wrapper {
   public debug: boolean;
   public handleCompletionStatus: boolean;
   public handleExitMode: boolean;
+  public apiIsFound: boolean;
 
   constructor(debug: boolean) {
     this.debug = debug;
@@ -14,6 +15,7 @@ class Wrapper {
 
     this.handleCompletionStatus = true;
     this.handleExitMode = true;
+    this.apiIsFound = false;
   }
 }
 

@@ -26,5 +26,10 @@ describe("Wrapper", () => {
     let wrapper = new Wrapper(true);
     expect(wrapper.apiHandle).toBeNull();
   });
+  
+  it("should set apiIsFound to false initially", () => {
+    let wrapper = new Wrapper(true);
+    expect(wrapper.apiIsFound).toBeFalse();
+  });
 
 });
