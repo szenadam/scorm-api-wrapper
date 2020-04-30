@@ -20,7 +20,11 @@ class ScormApiWrapper {
     this.connectionIsActive = false;
   }
 
-  public isAvailable() {
+  /**
+   * A simple function to allow Flash ExternalInterface to confirm
+   * presence of JS wrapper before attempting any LMS communication.
+   */
+  public isAvailable(): boolean {
     return true;
   }
 }
