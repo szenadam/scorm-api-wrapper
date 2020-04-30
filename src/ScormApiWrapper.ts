@@ -27,6 +27,20 @@ class ScormApiWrapper {
   public isAvailable(): boolean {
     return true;
   }
+
+  /**
+   * Displays error messages when in debug mode.
+   * @param msg message to be displayed
+   */
+  public trace(msg: string): void {
+    if (this.debug) {
+      if (console && console.log) {
+        console.log(msg);
+      } else {
+        //alert(msg);
+      }
+    }
+  }
 }
 
 export default ScormApiWrapper;
