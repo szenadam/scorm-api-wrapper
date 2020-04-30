@@ -1,15 +1,24 @@
 {
   "name": "scorm-api-wrapper",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "SCORM API Wrapper",
-  "main": "scorm-api-wrapper.js",
+  "main": "src/ScormApiWrapper.ts",
   "scripts": {
     "build": "tsc",
     "test": "jasmine --reporter=jasmine-console-reporter --config=jasmine.json",
     "test:watch": "nodemon --ext ts --exec \"jasmine --reporter=jasmine-console-reporter --config=jasmine.json\""
   },
   "author": "szenadam",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/szenadam/scorm-api-wrapper.git"
+  },
   "license": "MIT",
+  "homepage": "https://github.com/szenadam/scorm-api-wrapper",
+  "bugs": {
+    "url": "https://github.com/szenadam/scorm-api-wrapper",
+    "email": "szenadam1@gmail.com"
+  },
   "devDependencies": {
     "@types/jasmine": "^3.5.10",
     "jasmine": "^3.5.0",
