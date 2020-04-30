@@ -19,6 +19,10 @@ class ScormApiWrapper {
     this.apiIsFound = false;
     this.connectionIsActive = false;
   }
+
+  public isAvailable() {
+    return true;
+  }
 }
 
 export default ScormApiWrapper;
