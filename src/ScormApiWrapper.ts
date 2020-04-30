@@ -41,6 +41,79 @@ class ScormApiWrapper {
       }
     }
   }
+
+  /**
+   * Looks for an object named API in parent and opener windows
+   * @param win the window object
+   */
+  public find(win: any): any {
+    let API = null;
+    let findAttempts = 0;
+    const findAttemptLimit = 500;
+    const traceMsgPrefix = "SCORM.API.find";
+
+    while (
+      !win.API &&
+      !win.API_1484_11 &&
+      win.parent &&
+      win.parent != win &&
+      findAttempts <= findAttemptLimit
+    ) {
+      findAttempts++;
+      win = win.parent;
+    }
+
+    if (this.scormVersion) {
+      switch (this.scormVersion) {
+        case "2004":
+          if (win.API_1484_11) {
+            API = win.API_1484_11;
+          } else {
+            this.trace(
+              traceMsgPrefix +
+                ": SCORM version 2004 was specified by user, but API_1484_11 cannot be found."
+            );
+          }
+          break;
+        case "1.2":
+          if (win.API) {
+            API = win.API;
+          } else {
+            this.trace(
+              traceMsgPrefix +
+                ": SCORM version 1.2 was specified by user, but API cannot be found."
+            );
+          }
+          break;
+      }
+    } else {
+      //If SCORM version not specified by user, look for APIs
+      if (win.API_1484_11) {
+        //SCORM 2004-specific API.
+        this.scormVersion = "2004";
+        API = win.API_1484_11;
+      } else if (win.API) {
+        //SCORM 1.2-specific API
+        this.scormVersion = "1.2";
+        API = win.API;
+      }
+    }
+
+    if (API) {
+      this.trace(traceMsgPrefix + ": API found. Version: " + this.scormVersion);
+      this.trace("API: " + API);
+    } else {
+      this.trace(
+        traceMsgPrefix +
+          ": Error finding API. \nFind attempts: " +
+          findAttempts +
+          ". \nFind attempt limit: " +
+          findAttemptLimit
+      );
+    }
+
+    return API;
+  }
 }
 
 export default ScormApiWrapper;
