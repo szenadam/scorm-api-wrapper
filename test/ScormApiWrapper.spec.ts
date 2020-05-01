@@ -168,4 +168,23 @@ describe("Wrapper", () => {
       expect(spy).toHaveBeenCalledTimes(4);
     });
   });
+
+  describe("get", () => {
+
+    beforeEach(() => {
+      window["API"] = {};
+    });
+
+    afterEach(()=>{
+      delete window["API"];
+    });
+
+    it("should get the API object from the current window", () => {
+      window["API"] = {};
+      const wrapper = new ScormApiWrapper(false);
+
+      const result = wrapper.get();
+      expect(result).toEqual({});
+    });
+  });
 });

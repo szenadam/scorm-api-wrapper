@@ -114,6 +114,38 @@ class ScormApiWrapper {
 
     return API;
   }
+
+  /**
+   * Looks for an object named API, first in the current window's frame
+   * hierarchy and then, if necessary, in the current window's opener window
+   * hierarchy (if there is an opener window).
+   */
+  public get(): any {
+    let API = null;
+    let win = window;
+
+    API = this.find(win);
+
+    if (!API && win.parent && win.parent != win) {
+      API = this.find(win.parent);
+    }
+
+    if (!API && win.top && win.top.opener) {
+      API = this.find(win.top.opener);
+    }
+
+    if (!API && win.top && win.top.opener && win.top.opener.document) {
+      API = this.find(win.top.opener.document);
+    }
+
+    if (API) {
+      this.apiIsFound = true;
+    } else {
+      this.trace("API.get failed: Can't find the API!");
+    }
+
+    return API;
+  }
 }
 
 export default ScormApiWrapper;
