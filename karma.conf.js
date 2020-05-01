@@ -5,7 +5,7 @@ module.exports = function (config) {
     preprocessors: {
       "**/*.ts": "karma-typescript",
     },
-    reporters: ["progress", "karma-typescript"],
+    reporters: ["progress", "karma-typescript", "kjhtml"],
     browsers: ["Chrome"],
   });
 };
