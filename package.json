@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "test": "jasmine --reporter=jasmine-console-reporter --config=jasmine.json",
-    "test:watch": "nodemon --ext ts --exec \"jasmine --reporter=jasmine-console-reporter --config=jasmine.json\""
+    "test:watch": "nodemon --ext ts --exec \"jasmine --reporter=jasmine-console-reporter --config=jasmine.json\"",
+    "karma": "karma start"
   },
   "author": "szenadam",
   "repository": {
