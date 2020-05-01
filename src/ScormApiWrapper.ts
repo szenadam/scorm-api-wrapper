@@ -146,6 +146,17 @@ class ScormApiWrapper {
 
     return API;
   }
+
+  /**
+   * Returns the handle to API object if it was previously set
+   */
+  public getHandle() {
+    if (!this.apiHandle && !this.apiIsFound) {
+      this.apiHandle = this.get();
+    }
+
+    return this.apiHandle;
+  }
 }
 
 export default ScormApiWrapper;

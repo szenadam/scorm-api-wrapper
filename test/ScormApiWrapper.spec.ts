@@ -170,12 +170,11 @@ describe("Wrapper", () => {
   });
 
   describe("get", () => {
-
     beforeEach(() => {
       window["API"] = {};
     });
 
-    afterEach(()=>{
+    afterEach(() => {
       delete window["API"];
     });
 
@@ -185,6 +184,25 @@ describe("Wrapper", () => {
 
       const result = wrapper.get();
       expect(result).toEqual({});
+    });
+  });
+
+  describe("getHandle", () => {
+    beforeEach(() => {
+      window["API"] = {};
+    });
+
+    afterEach(() => {
+      delete window["API"];
+    });
+
+    it("should get the API handle when it is not set", () => {
+      const wrapper = new ScormApiWrapper(false);
+
+      const handle = wrapper.getHandle();
+
+      expect(wrapper.apiHandle).toEqual({});
+      expect(handle).toEqual({});
     });
   });
 });
