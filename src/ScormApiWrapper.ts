@@ -150,12 +150,37 @@ class ScormApiWrapper {
   /**
    * Returns the handle to API object if it was previously set
    */
-  public getHandle() {
+  public getHandle(): any {
     if (!this.apiHandle && !this.apiIsFound) {
       this.apiHandle = this.get();
     }
 
     return this.apiHandle;
+  }
+
+  /**
+   * "Used by a SCO to request the textual description for the error code
+   * specified by the value of [errorCode]."
+   * @param errorCode
+   */
+  public getInfo(errorCode: number): string {
+    let API = this.getHandle();
+    let result = "";
+
+    if (API) {
+      switch (this.scormVersion) {
+        case "1.2":
+          result = API.LMSGetErrorString(errorCode.toString());
+          break;
+        case "2004":
+          result = API.GetErrorString(errorCode.toString());
+          break;
+      }
+    } else {
+      this.trace("SCORM.debug.getInfo failed: API is null.");
+    }
+
+    return String(result);
   }
 }
 

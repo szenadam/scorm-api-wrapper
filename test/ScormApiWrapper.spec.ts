@@ -205,4 +205,19 @@ describe("Wrapper", () => {
       expect(handle).toEqual({});
     });
   });
+
+  describe("getInfo", () => {
+    it("should get SCORM 1.2 error code", () => {
+      const wrapper = new ScormApiWrapper(false);
+      const spy = spyOn(wrapper, 'getHandle').and.returnValue({LMSGetErrorString: () => {
+        return "foo";
+      }})
+      wrapper.scormVersion = "1.2"
+
+      const result = wrapper.getInfo(1);
+
+      expect(spy).toHaveBeenCalled();
+      expect(result).toEqual("foo");
+    });
+  });
 });
