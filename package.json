@@ -5,9 +5,7 @@
   "main": "src/ScormApiWrapper.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jasmine --reporter=jasmine-console-reporter --config=jasmine.json",
-    "test:watch": "nodemon --ext ts --exec \"jasmine --reporter=jasmine-console-reporter --config=jasmine.json\"",
-    "karma": "karma start"
+    "test": "karma start"
   },
   "author": "szenadam",
   "repository": {
@@ -30,8 +28,6 @@
     "karma-jasmine": "^3.1.1",
     "karma-jasmine-html-reporter": "^1.5.3",
     "karma-typescript": "^5.0.2",
-    "nodemon": "^2.0.3",
-    "ts-node": "^8.9.1",
     "typescript": "^3.8.3"
   }
 }
