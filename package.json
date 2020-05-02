@@ -5,7 +5,8 @@
   "main": "src/ScormApiWrapper.ts",
   "scripts": {
     "build": "tsc",
-    "test": "karma start"
+    "test": "karma start",
+    "test:ci": "karma start --single-run --browsers ChromeHeadless karma.conf.js"
   },
   "author": "szenadam",
   "repository": {
@@ -28,6 +29,7 @@
     "karma-jasmine": "^3.1.1",
     "karma-jasmine-html-reporter": "^1.5.3",
     "karma-typescript": "^5.0.2",
+    "puppeteer": "^3.0.2",
     "typescript": "^3.8.3"
   }
 }
