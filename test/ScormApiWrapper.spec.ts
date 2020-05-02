@@ -249,4 +249,58 @@ describe("Wrapper", () => {
       expect(result).toEqual("foo");
     });
   });
+
+  describe("stringToBoolean", () => {
+    it("should return true when input is a String object with 'true'", () => {
+      const wrapper = new ScormApiWrapper(false);
+
+      const result = wrapper.stringToBoolean(String("true"));
+
+      expect(result).toBeTrue();
+    });
+
+    it("should return false when input is a String object with 'false'", () => {
+      const wrapper = new ScormApiWrapper(false);
+
+      const result = wrapper.stringToBoolean(String("false"));
+
+      expect(result).toBeFalse();
+    });
+
+    it("should return boolean inputs with same value", () => {
+      const wrapper = new ScormApiWrapper(false);
+
+      let result = wrapper.stringToBoolean(true);
+      expect(result).toBeTrue();
+
+      result = wrapper.stringToBoolean(false);
+      expect(result).toBeFalse();
+    });
+
+    it("should return false for the number zero", () => {
+      const wrapper = new ScormApiWrapper(false);
+
+      const result = wrapper.stringToBoolean(0);
+
+      expect(result).toBeFalse();
+    });
+
+    it("should return true for any non-zero integers", () => {
+      const wrapper = new ScormApiWrapper(false);
+
+      let result = wrapper.stringToBoolean(1);
+      expect(result).toBeTrue();
+
+      result = wrapper.stringToBoolean(-1);
+      expect(result).toBeTrue();
+    });
+
+    it("should return null for undefined value", () => {
+      const wrapper = new ScormApiWrapper(false);
+
+      const result = wrapper.stringToBoolean(undefined);
+
+      expect(result).toBeNull();
+    });
+  });
 });

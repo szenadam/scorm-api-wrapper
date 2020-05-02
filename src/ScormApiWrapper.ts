@@ -182,6 +182,28 @@ class ScormApiWrapper {
 
     return String(result);
   }
+
+  /**
+   * Converts 'boolean strings' into actual valid booleans.
+   * (Most values returned from the API are the strings "true" and "false".)
+   * @param value
+   */
+  public stringToBoolean(value: any): boolean | null {
+    var valueType = typeof value;
+    switch (valueType) {
+      case "object":
+      case "string":
+        return /(true|1)/i.test(value);
+      case "number":
+        return !!value;
+      case "boolean":
+        return value;
+      case "undefined":
+        return null;
+      default:
+        return false;
+    }
+  }
 }
 
 export default ScormApiWrapper;
