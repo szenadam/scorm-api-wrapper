@@ -207,12 +207,41 @@ describe("Wrapper", () => {
   });
 
   describe("getInfo", () => {
-    it("should get SCORM 1.2 error code", () => {
+    it("should return an empty string and call trace when API is not found", () => {
       const wrapper = new ScormApiWrapper(false);
-      const spy = spyOn(wrapper, 'getHandle').and.returnValue({LMSGetErrorString: () => {
-        return "foo";
-      }})
-      wrapper.scormVersion = "1.2"
+      const getHandleSpy = spyOn(wrapper, "getHandle").and.returnValue(null);
+      const traceSpy = spyOn(wrapper, "trace");
+
+      const result = wrapper.getInfo(1);
+
+      expect(getHandleSpy).toHaveBeenCalled();
+      expect(result).toEqual("");
+      expect(traceSpy).toHaveBeenCalled();
+    });
+
+    it("should get error code when scorm version is set to 1.2", () => {
+      const wrapper = new ScormApiWrapper(false);
+      const spy = spyOn(wrapper, "getHandle").and.returnValue({
+        LMSGetErrorString: () => {
+          return "foo";
+        },
+      });
+      wrapper.scormVersion = "1.2";
+
+      const result = wrapper.getInfo(1);
+
+      expect(spy).toHaveBeenCalled();
+      expect(result).toEqual("foo");
+    });
+
+    it("should get error code when scorm version is set to 2004", () => {
+      const wrapper = new ScormApiWrapper(false);
+      const spy = spyOn(wrapper, "getHandle").and.returnValue({
+        GetErrorString: () => {
+          return "foo";
+        },
+      });
+      wrapper.scormVersion = "2004";
 
       const result = wrapper.getInfo(1);
 

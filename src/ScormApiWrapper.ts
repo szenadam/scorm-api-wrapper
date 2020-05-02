@@ -161,7 +161,7 @@ class ScormApiWrapper {
   /**
    * "Used by a SCO to request the textual description for the error code
    * specified by the value of [errorCode]."
-   * @param errorCode
+   * @param errorCode {number}
    */
   public getInfo(errorCode: number): string {
     let API = this.getHandle();
