@@ -56,7 +56,7 @@ class ScormApiWrapper {
     let API = null;
     let findAttempts = 0;
     const findAttemptLimit = 500;
-    const traceMsgPrefix = "SCORM.API.find";
+    const traceMsgPrefix = 'SCORM.API.find';
 
     while (
       !win.API &&
@@ -71,46 +71,46 @@ class ScormApiWrapper {
 
     if (this.scormVersion) {
       switch (this.scormVersion) {
-        case "2004":
+        case '2004':
           if (win.API_1484_11) {
             API = win.API_1484_11;
           } else {
             this.trace(
               traceMsgPrefix +
-              ": SCORM version 2004 was specified by user, but API_1484_11 cannot be found."
+              ': SCORM version 2004 was specified by user, but API_1484_11 cannot be found.'
             );
           }
           break;
-        case "1.2":
+        case '1.2':
           if (win.API) {
             API = win.API;
           } else {
             this.trace(
               traceMsgPrefix +
-              ": SCORM version 1.2 was specified by user, but API cannot be found."
+              ': SCORM version 1.2 was specified by user, but API cannot be found.'
             );
           }
           break;
       }
     } else {
       if (win.API_1484_11) {
-        this.scormVersion = "2004";
+        this.scormVersion = '2004';
         API = win.API_1484_11;
       } else if (win.API) {
-        this.scormVersion = "1.2";
+        this.scormVersion = '1.2';
         API = win.API;
       }
     }
 
     if (API) {
-      this.trace(traceMsgPrefix + ": API found. Version: " + this.scormVersion);
-      this.trace("API: " + API);
+      this.trace(traceMsgPrefix + ': API found. Version: ' + this.scormVersion);
+      this.trace('API: ' + API);
     } else {
       this.trace(
         traceMsgPrefix +
-        ": Error finding API. \nFind attempts: " +
+        ': Error finding API. \nFind attempts: ' +
         findAttempts +
-        ". \nFind attempt limit: " +
+        '. \nFind attempt limit: ' +
         findAttemptLimit
       );
     }
@@ -144,7 +144,7 @@ class ScormApiWrapper {
     if (API) {
       this.apiIsFound = true;
     } else {
-      this.trace("API.get failed: Can't find the API!");
+      this.trace('API.get failed: Can\'t find the API!');
     }
 
     return API;
@@ -168,19 +168,19 @@ class ScormApiWrapper {
    */
   public getInfo(errorCode: number): string {
     const API = this.getHandle();
-    let result = "";
+    let result = '';
 
     if (API) {
       switch (this.scormVersion) {
-        case "1.2":
+        case '1.2':
           result = API.LMSGetErrorString(errorCode.toString());
           break;
-        case "2004":
+        case '2004':
           result = API.GetErrorString(errorCode.toString());
           break;
       }
     } else {
-      this.trace("SCORM.debug.getInfo failed: API is null.");
+      this.trace('SCORM.debug.getInfo failed: API is null.');
     }
 
     return String(result);
@@ -194,14 +194,14 @@ class ScormApiWrapper {
   public stringToBoolean(value: any): boolean | null {
     const valueType = typeof value;
     switch (valueType) {
-      case "object":
-      case "string":
+      case 'object':
+      case 'string':
         return /(true|1)/i.test(value);
-      case "number":
+      case 'number':
         return !!value;
-      case "boolean":
+      case 'boolean':
         return value;
-      case "undefined":
+      case 'undefined':
         return null;
       default:
         return false;
@@ -214,15 +214,15 @@ class ScormApiWrapper {
 
     if (API) {
       switch (this.scormVersion) {
-        case "1.2":
+        case '1.2':
           code = parseInt(API.LMSGetLastError(), 10);
           break;
-        case "2004":
+        case '2004':
           code = parseInt(API.GetLastError(), 10);
           break;
       }
     } else {
-      this.trace("SCORM.debug.getCode failed: API is null.");
+      this.trace('SCORM.debug.getCode failed: API is null.');
     }
 
     return code;
@@ -240,7 +240,7 @@ class ScormApiWrapper {
    */
   public dataGet(parameter: string): string {
     let value = null;
-    const traceMsgPrefix = "SCORM.data.get('" + parameter + "') ";
+    const traceMsgPrefix = 'SCORM.data.get(\'' + parameter + '\') ';
 
     if (this.connectionIsActive) {
       const API = this.getHandle();
@@ -248,44 +248,44 @@ class ScormApiWrapper {
 
       if (API) {
         switch (this.scormVersion) {
-          case "1.2":
+          case '1.2':
             value = API.LMSGetValue(parameter);
             break;
-          case "2004":
+          case '2004':
             value = API.GetValue(parameter);
             break;
         }
         errorCode = this.getCode();
 
-        if (value !== "" || errorCode === 0) {
+        if (value !== '' || errorCode === 0) {
           switch (parameter) {
-            case "cmi.core.lesson_status":
-            case "cmi.completion_status":
+            case 'cmi.core.lesson_status':
+            case 'cmi.completion_status':
               this.dataCompletionStatus = value;
               break;
 
-            case "cmi.core.exit":
-            case "cmi.exit":
+            case 'cmi.core.exit':
+            case 'cmi.exit':
               this.dataExitStatus = value;
               break;
           }
         } else {
           this.trace(
             traceMsgPrefix +
-            "failed. \nError code: " +
+            'failed. \nError code: ' +
             errorCode +
-            "\nError info: " +
+            '\nError info: ' +
             this.getInfo(errorCode)
           );
         }
       } else {
-        this.trace(traceMsgPrefix + "failed: API is null.");
+        this.trace(traceMsgPrefix + 'failed: API is null.');
       }
     } else {
-      this.trace(traceMsgPrefix + "failed: API connection is inactive.");
+      this.trace(traceMsgPrefix + 'failed: API connection is inactive.');
     }
 
-    this.trace(traceMsgPrefix + " value: " + value);
+    this.trace(traceMsgPrefix + ' value: ' + value);
 
     return String(value);
   }
@@ -300,7 +300,7 @@ class ScormApiWrapper {
    */
   public dataSet(parameter: string, value: string): boolean | null {
     let success: boolean | null = false;
-    const traceMsgPrefix = "SCORM.data.set('" + parameter + "') ";
+    const traceMsgPrefix = 'SCORM.data.set(\'' + parameter + '\') ';
 
     if (this.connectionIsActive) {
       const API = this.getHandle();
@@ -308,18 +308,18 @@ class ScormApiWrapper {
 
       if (API) {
         switch (this.scormVersion) {
-          case "1.2":
+          case '1.2':
             success = this.stringToBoolean(API.LMSSetValue(parameter, value));
             break;
-          case "2004":
+          case '2004':
             success = this.stringToBoolean((API.SetValue(parameter, value)));
             break;
         }
 
         if (success) {
           if (
-            parameter === "cmi.core.lesson_status" ||
-            parameter === "cmi.completion_status"
+            parameter === 'cmi.core.lesson_status' ||
+            parameter === 'cmi.completion_status'
           ) {
             this.dataCompletionStatus = value;
           }
@@ -328,20 +328,20 @@ class ScormApiWrapper {
 
           this.trace(
             traceMsgPrefix +
-            "failed. \nError code: " +
+            'failed. \nError code: ' +
             errorCode +
-            ". \nError info: " +
+            '. \nError info: ' +
             this.getInfo(errorCode)
           );
         }
       } else {
-        this.trace(traceMsgPrefix + "failed: API is null.");
+        this.trace(traceMsgPrefix + 'failed: API is null.');
       }
     } else {
-      this.trace(traceMsgPrefix + "failed: API connection is inactive.");
+      this.trace(traceMsgPrefix + 'failed: API connection is inactive.');
     }
 
-    this.trace(traceMsgPrefix + " value: " + value);
+    this.trace(traceMsgPrefix + ' value: ' + value);
 
     return success;
   }

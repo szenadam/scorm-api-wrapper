@@ -6,7 +6,11 @@
   "jsRules": {},
   "rules": {
     "no-console": false,
-    "triple-equals": false
+    "triple-equals": false,
+    "quotemark": [
+      true,
+      "single"
+    ]
   },
   "rulesDirectory": []
 }
