@@ -8,11 +8,17 @@ class ScormApiWrapper {
   public apiIsFound: boolean;
   public connectionIsActive: boolean;
 
+  public dataCompletionStatus: any;
+  public dataExitStatus: any;
+
   constructor(debug: boolean) {
     this.debug = debug;
 
     this.scormVersion = null;
     this.apiHandle = null;
+
+    this.dataCompletionStatus = null;
+    this.dataExitStatus = null;
 
     this.handleCompletionStatus = true;
     this.handleExitMode = true;
@@ -58,7 +64,7 @@ class ScormApiWrapper {
       win.parent &&
       win.parent != win &&
       findAttempts <= findAttemptLimit
-    ) {
+      ) {
       findAttempts++;
       win = win.parent;
     }
@@ -71,7 +77,7 @@ class ScormApiWrapper {
           } else {
             this.trace(
               traceMsgPrefix +
-                ": SCORM version 2004 was specified by user, but API_1484_11 cannot be found."
+              ": SCORM version 2004 was specified by user, but API_1484_11 cannot be found."
             );
           }
           break;
@@ -81,7 +87,7 @@ class ScormApiWrapper {
           } else {
             this.trace(
               traceMsgPrefix +
-                ": SCORM version 1.2 was specified by user, but API cannot be found."
+              ": SCORM version 1.2 was specified by user, but API cannot be found."
             );
           }
           break;
@@ -105,10 +111,10 @@ class ScormApiWrapper {
     } else {
       this.trace(
         traceMsgPrefix +
-          ": Error finding API. \nFind attempts: " +
-          findAttempts +
-          ". \nFind attempt limit: " +
-          findAttemptLimit
+        ": Error finding API. \nFind attempts: " +
+        findAttempts +
+        ". \nFind attempt limit: " +
+        findAttemptLimit
       );
     }
 
@@ -223,6 +229,68 @@ class ScormApiWrapper {
     }
 
     return code;
+  }
+
+  /**
+   * Requests information from the LMS.
+   *
+   * Side effects:
+   *  - Sets the class property dataCompletionStatus when "cmi.core.lesson_status" (SCORM 1.2) or "cmi.completion_status"
+   * (SCORM 2004) is requested.
+   *  - Also sets class property dataExitStatus when "cmi.core.exit" (SCORM 1.2) or "cmi.exit"
+   * (SCORM 2004) is requested.
+   * @param {string} parameter parameter name of the SCORM data model element
+   */
+  public dataGet(parameter: string): string {
+    let value = null;
+    const traceMsgPrefix = "SCORM.data.get('" + parameter + "') ";
+
+    if (this.connectionIsActive) {
+      const API = this.getHandle();
+      let errorCode = 0;
+
+      if (API) {
+        switch (this.scormVersion) {
+          case "1.2":
+            value = API.LMSGetValue(parameter);
+            break;
+          case "2004":
+            value = API.GetValue(parameter);
+            break;
+        }
+        errorCode = this.getCode();
+
+        if (value !== "" || errorCode === 0) {
+          switch (parameter) {
+            case "cmi.core.lesson_status":
+            case "cmi.completion_status":
+              this.dataCompletionStatus = value;
+              break;
+
+            case "cmi.core.exit":
+            case "cmi.exit":
+              this.dataExitStatus = value;
+              break;
+          }
+        } else {
+          this.trace(
+            traceMsgPrefix +
+            "failed. \nError code: " +
+            errorCode +
+            "\nError info: " +
+            this.getInfo(errorCode)
+          );
+        }
+      } else {
+        this.trace(traceMsgPrefix + "failed: API is null.");
+      }
+    } else {
+      this.trace(traceMsgPrefix + "failed: API connection is inactive.");
+    }
+
+    this.trace(traceMsgPrefix + " value: " + value);
+
+    return String(value);
   }
 }
 

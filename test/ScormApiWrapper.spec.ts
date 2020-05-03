@@ -308,7 +308,7 @@ describe("Wrapper", () => {
     it('should return the current error code from the LMS when SCORM version is 1.2', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.scormVersion = "1.2";
-      spyOn(wrapper, 'getHandle').and.returnValue({LMSGetLastError: () => "1"});
+      spyOn(wrapper, 'getHandle').and.returnValue({ LMSGetLastError: () => "1" });
 
       const result = wrapper.getCode();
 
@@ -318,7 +318,7 @@ describe("Wrapper", () => {
     it('should return the current error code from the LMS when SCORM version is 2004', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.scormVersion = "2004";
-      spyOn(wrapper, 'getHandle').and.returnValue({GetLastError: () => "1"});
+      spyOn(wrapper, 'getHandle').and.returnValue({ GetLastError: () => "1" });
 
       const result = wrapper.getCode();
 
@@ -333,6 +333,92 @@ describe("Wrapper", () => {
 
       expect(result).toEqual(0);
       expect(traceSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("dataGet", () => {
+    it('should get a value from the LMS when SCORM version is set to 1.2', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      wrapper.scormVersion = "1.2";
+      spyOn(wrapper, 'getHandle').and.returnValue({ LMSGetValue: () => "foo" });
+      spyOn(wrapper, 'getCode').and.returnValue(0);
+
+      const result = wrapper.dataGet("parameter");
+
+      expect(result).toEqual("foo");
+    });
+
+    it('should get a value from the LMS when SCORM version is set to 2004', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      wrapper.scormVersion = "2004";
+      spyOn(wrapper, 'getHandle').and.returnValue({ GetValue: () => "foo" });
+      spyOn(wrapper, 'getCode').and.returnValue(0);
+
+      const result = wrapper.dataGet("parameter");
+
+      expect(result).toEqual("foo");
+    });
+
+    it('should return "null" (string) and call trace function when connection is not initialized', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = false;
+      const traceSpy = spyOn(wrapper, 'trace');
+
+      const result = wrapper.dataGet("parameter");
+
+      expect(result).toEqual("null");
+      expect(traceSpy).toHaveBeenCalled();
+    });
+
+    it('should return "null" (string) and call trace function when API is null', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      const traceSpy = spyOn(wrapper, 'trace');
+
+      const result = wrapper.dataGet("parameter");
+
+      expect(result).toEqual("null");
+      expect(traceSpy).toHaveBeenCalled();
+    });
+
+    it('should return empty string and call trace function when value returned from LMS is an empty string', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      wrapper.scormVersion = "2004";
+      spyOn(wrapper, 'getHandle').and.returnValue({ GetValue: () => "" });
+      spyOn(wrapper, 'getCode').and.returnValue(0);
+      const traceSpy = spyOn(wrapper, 'trace');
+
+      const result = wrapper.dataGet("parameter");
+
+      expect(result).toEqual("");
+      expect(traceSpy).toHaveBeenCalled();
+    });
+
+    it('should set completion status when parameter is "cmi.completion_status" (SCORM 2004)', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      wrapper.scormVersion = "2004";
+      spyOn(wrapper, 'getHandle').and.returnValue({ GetValue: () => "foo" });
+      spyOn(wrapper, 'getCode').and.returnValue(0);
+
+      wrapper.dataGet("cmi.completion_status");
+
+      expect(wrapper.dataCompletionStatus).toEqual("foo");
+    });
+
+    it('should set exit status when parameter is "cmi.exit" (SCORM 2004)', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      wrapper.scormVersion = "2004";
+      spyOn(wrapper, 'getHandle').and.returnValue({ GetValue: () => "foo" });
+      spyOn(wrapper, 'getCode').and.returnValue(0);
+
+      wrapper.dataGet("cmi.exit");
+
+      expect(wrapper.dataExitStatus).toEqual("foo");
     });
   });
 });
