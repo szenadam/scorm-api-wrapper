@@ -568,5 +568,32 @@ describe('Wrapper', () => {
       expect(result).toBeFalse();
       expect(traceSpy).toHaveBeenCalled();
     });
+  });
+
+  describe('initialize', () => {
+    it('should return true and set connectionIsActive to true when successfully initialized', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.scormVersion = '2004';
+      wrapper.handleCompletionStatus = true;
+      spyOn(wrapper, 'getHandle').and.returnValue({ Initialize: () => 'true' });
+      spyOn(wrapper, 'getCode').and.returnValue(0);
+      spyOn(wrapper, 'status').and.returnValue(true);
+      spyOn(wrapper, 'save').and.returnValue(true);
+
+      const result = wrapper.initialize();
+
+      expect(result).toBeTrue();
+      expect(wrapper.connectionIsActive).toBeTrue();
+    });
+
+    it('should return false and call trace when already initialized', () => {
+      const wrapper = new ScormApiWrapper(false);
+      const traceSpy = spyOn(wrapper, 'trace');
+
+      const result = wrapper.initialize();
+
+      expect(result).toBeFalse();
+      expect(traceSpy).toHaveBeenCalled();
+    });
   })
 });
