@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "test": "karma start --browsers Chrome karma.conf.js",
-    "test:ci": "karma start --single-run --browsers ChromeHeadless karma.conf.js"
+    "test:ci": "karma start --single-run --browsers ChromeHeadless karma.conf.js",
+    "lint": "tslint --project ."
   },
   "author": "szenadam",
   "repository": {
@@ -30,6 +31,7 @@
     "karma-jasmine-html-reporter": "^1.5.3",
     "karma-typescript": "^5.0.2",
     "puppeteer": "^3.0.2",
+    "tslint": "^6.1.2",
     "typescript": "^3.8.3"
   }
 }
