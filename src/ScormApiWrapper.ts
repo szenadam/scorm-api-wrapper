@@ -383,6 +383,34 @@ class ScormApiWrapper {
 
     return success;
   }
+
+  /**
+   * Instructs the LMS to persist all data to this point in the session
+   */
+  public save(): boolean | null {
+    let success: boolean | null = false;
+    const traceMsgPrefix = 'SCORM.data.save failed';
+
+    if (this.connectionIsActive) {
+      const API = this.getHandle();
+      if (API) {
+        switch (this.scormVersion) {
+          case '1.2':
+            success = this.stringToBoolean(API.LMSCommit(''));
+            break;
+          case '2004':
+            success = this.stringToBoolean(API.Commit(''));
+            break;
+        }
+      } else {
+        this.trace(traceMsgPrefix + ': API is null.');
+      }
+    } else {
+      this.trace(traceMsgPrefix + ': API connection is inactive.');
+    }
+
+    return success;
+  }
 }
 
 export default ScormApiWrapper;

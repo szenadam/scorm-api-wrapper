@@ -535,4 +535,38 @@ describe('Wrapper', () => {
       expect(traceSpy).toHaveBeenCalled();
     });
   });
+
+  describe('save', () => {
+    it('should return true when save was successful', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      wrapper.scormVersion = '2004';
+      spyOn(wrapper, 'getHandle').and.returnValue({ Commit: () => true });
+
+      const result = wrapper.save();
+
+      expect(result).toBeTrue();
+    });
+
+    it('should return false if connection is not active', () => {
+      const wrapper = new ScormApiWrapper(false);
+      const traceSpy = spyOn(wrapper, 'trace');
+
+      const result = wrapper.save();
+
+      expect(result).toBeFalse();
+      expect(traceSpy).toHaveBeenCalled();
+    });
+
+    it('should return false if API is not found', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      const traceSpy = spyOn(wrapper, 'trace');
+
+      const result = wrapper.save();
+
+      expect(result).toBeFalse();
+      expect(traceSpy).toHaveBeenCalled();
+    });
+  })
 });
