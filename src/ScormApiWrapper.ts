@@ -292,6 +292,62 @@ class ScormApiWrapper {
 
     return String(value);
   }
+
+  /**
+   * Tells the LMS to assign the value to the named data model element.
+   * Also stores the SCO's completion status in a variable named
+   * ScormApiWrapper.SCORM.data.completionStatus. This variable is checked whenever
+   * ScormApiWrapper.SCORM.connection.terminate() is invoked.
+   * @param parameter {string} The data model element
+   * @param value {string} The value for the data model element
+   */
+  public dataSet(parameter: string, value: string): boolean | null {
+    let success: boolean | null = false;
+    const traceMsgPrefix = "SCORM.data.set('" + parameter + "') ";
+
+    if (this.connectionIsActive) {
+      const API = this.getHandle();
+      let errorCode = 0;
+
+      if (API) {
+        switch (this.scormVersion) {
+          case "1.2":
+            success = this.stringToBoolean(API.LMSSetValue(parameter, value));
+            break;
+          case "2004":
+            success = this.stringToBoolean((API.SetValue(parameter, value)));
+            break;
+        }
+
+        if (success) {
+          if (
+            parameter === "cmi.core.lesson_status" ||
+            parameter === "cmi.completion_status"
+          ) {
+            this.dataCompletionStatus = value;
+          }
+        } else {
+          errorCode = this.getCode();
+
+          this.trace(
+            traceMsgPrefix +
+            "failed. \nError code: " +
+            errorCode +
+            ". \nError info: " +
+            this.getInfo(errorCode)
+          );
+        }
+      } else {
+        this.trace(traceMsgPrefix + "failed: API is null.");
+      }
+    } else {
+      this.trace(traceMsgPrefix + "failed: API connection is inactive.");
+    }
+
+    this.trace(traceMsgPrefix + " value: " + value);
+
+    return success;
+  }
 }
 
 export default ScormApiWrapper;

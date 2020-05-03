@@ -397,7 +397,7 @@ describe("Wrapper", () => {
       expect(traceSpy).toHaveBeenCalled();
     });
 
-    it('should set completion status when parameter is "cmi.completion_status" (SCORM 2004)', () => {
+    it('should set dataCompletionStatus property when parameter is "cmi.completion_status" (SCORM 2004)', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.connectionIsActive = true;
       wrapper.scormVersion = "2004";
@@ -409,7 +409,7 @@ describe("Wrapper", () => {
       expect(wrapper.dataCompletionStatus).toEqual("foo");
     });
 
-    it('should set exit status when parameter is "cmi.exit" (SCORM 2004)', () => {
+    it('should set dataExitStatus property when parameter is "cmi.exit" (SCORM 2004)', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.connectionIsActive = true;
       wrapper.scormVersion = "2004";
@@ -421,4 +421,63 @@ describe("Wrapper", () => {
       expect(wrapper.dataExitStatus).toEqual("foo");
     });
   });
+
+  describe("dataSet", () => {
+    it('should return true when data set call was successful', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      wrapper.scormVersion = "2004";
+      spyOn(wrapper, 'getHandle').and.returnValue({ SetValue: () => "true" });
+
+      const result = wrapper.dataSet("parameter", "value");
+
+      expect(result).toBeTrue();
+    });
+
+    it('should return false when data set call was unsuccessful', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      wrapper.scormVersion = "2004";
+      spyOn(wrapper, 'getHandle').and.returnValue({ SetValue: () => "false" });
+      spyOn(wrapper, 'getCode').and.returnValue(0);
+      spyOn(wrapper, 'getInfo').and.returnValue("");
+
+      const result = wrapper.dataSet("parameter", "value");
+
+      expect(result).toBeFalse();
+    });
+
+    it('should return false and call trace function when connection is not active', () => {
+      const wrapper = new ScormApiWrapper(false);
+      const traceSpy = spyOn(wrapper, 'trace');
+
+      const result = wrapper.dataSet("parameter", "value");
+
+      expect(result).toBeFalse();
+      expect(traceSpy).toHaveBeenCalled();
+    });
+
+    it('should return false and call trace function when API is not found', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      const traceSpy = spyOn(wrapper, 'trace');
+
+      const result = wrapper.dataSet("parameter", "value");
+
+      expect(result).toBeFalse();
+      expect(traceSpy).toHaveBeenCalled();
+    });
+
+    it('should set dataCompletionStatus property when parameter is cmi.completion_status', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      wrapper.scormVersion = "2004";
+      spyOn(wrapper, 'getHandle').and.returnValue({ SetValue: () => "false" });
+      spyOn(wrapper, 'stringToBoolean').and.returnValue(true);
+
+      wrapper.dataSet("cmi.completion_status", "value");
+
+      expect(wrapper.dataCompletionStatus).toEqual("value");
+    });
+  })
 });
