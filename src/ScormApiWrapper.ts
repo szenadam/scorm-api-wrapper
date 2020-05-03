@@ -345,6 +345,44 @@ class ScormApiWrapper {
 
     return success;
   }
+
+  public status(action: string, status: string): string | boolean | null {
+    let success: string | boolean | null = false;
+    const traceMsgPrefix = 'SCORM.getStatus failed';
+    let cmi = '';
+
+    if (action !== null) {
+      switch (this.scormVersion) {
+        case '1.2':
+          cmi = 'cmi.core.lesson_status';
+          break;
+        case '2004':
+          cmi = 'cmi.completion_status';
+          break;
+      }
+
+      switch (action) {
+        case 'get':
+          success = this.dataGet(cmi);
+          break;
+        case 'set':
+          if (status !== null) {
+            success = this.dataSet(cmi, status);
+          } else {
+            success = false;
+            this.trace(traceMsgPrefix + ': status was not specified.');
+          }
+          break;
+        default:
+          success = false;
+          this.trace(traceMsgPrefix + ': no valid action was specified.');
+      }
+    } else {
+      this.trace(traceMsgPrefix + ': action was not specified.');
+    }
+
+    return success;
+  }
 }
 
 export default ScormApiWrapper;
