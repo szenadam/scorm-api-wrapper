@@ -189,7 +189,7 @@ class ScormApiWrapper {
    * @param value
    */
   public stringToBoolean(value: any): boolean | null {
-    var valueType = typeof value;
+    const valueType = typeof value;
     switch (valueType) {
       case "object":
       case "string":
