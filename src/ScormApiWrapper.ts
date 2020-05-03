@@ -204,6 +204,26 @@ class ScormApiWrapper {
         return false;
     }
   }
+
+  public getCode(): number {
+    const API = this.getHandle();
+    let code = 0;
+
+    if (API) {
+      switch (this.scormVersion) {
+        case "1.2":
+          code = parseInt(API.LMSGetLastError(), 10);
+          break;
+        case "2004":
+          code = parseInt(API.GetLastError(), 10);
+          break;
+      }
+    } else {
+      this.trace("SCORM.debug.getCode failed: API is null.");
+    }
+
+    return code;
+  }
 }
 
 export default ScormApiWrapper;

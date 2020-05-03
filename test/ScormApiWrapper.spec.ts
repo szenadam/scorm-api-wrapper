@@ -303,4 +303,36 @@ describe("Wrapper", () => {
       expect(result).toBeNull();
     });
   });
+
+  describe("getCode", () => {
+    it('should return the current error code from the LMS when SCORM version is 1.2', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.scormVersion = "1.2";
+      spyOn(wrapper, 'getHandle').and.returnValue({LMSGetLastError: () => "1"});
+
+      const result = wrapper.getCode();
+
+      expect(result).toEqual(1);
+    });
+
+    it('should return the current error code from the LMS when SCORM version is 2004', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.scormVersion = "2004";
+      spyOn(wrapper, 'getHandle').and.returnValue({GetLastError: () => "1"});
+
+      const result = wrapper.getCode();
+
+      expect(result).toEqual(1);
+    });
+
+    it('should return 0 and call the trace function when no API is found', function () {
+      const wrapper = new ScormApiWrapper(false);
+      const traceSpy = spyOn(wrapper, 'trace');
+
+      const result = wrapper.getCode();
+
+      expect(result).toEqual(0);
+      expect(traceSpy).toHaveBeenCalled();
+    });
+  });
 });
