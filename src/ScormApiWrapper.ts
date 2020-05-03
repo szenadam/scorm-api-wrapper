@@ -121,7 +121,7 @@ class ScormApiWrapper {
    * hierarchy (if there is an opener window).
    */
   public get(): any {
-    let API = null;
+    let API: null;
     let win = window;
 
     API = this.find(win);
