@@ -4,51 +4,51 @@ import ScormApiWrapper from '../src/ScormApiWrapper';
 describe('Wrapper', () => {
   describe('initialization', () => {
     it('debug mode should be set to true', () => {
-      let wrapper = new ScormApiWrapper(true);
+      const wrapper = new ScormApiWrapper(true);
       expect(wrapper.debug).toBe(true);
     });
 
     it('should set scorm version to null initially', () => {
-      let wrapper = new ScormApiWrapper(true);
+      const wrapper = new ScormApiWrapper(true);
       expect(wrapper.scormVersion).toBeNull();
     });
 
     it('should set handleCompletionStatus to true initially', () => {
-      let wrapper = new ScormApiWrapper(true);
+      const wrapper = new ScormApiWrapper(true);
       expect(wrapper.handleCompletionStatus).toBeTrue();
     });
 
     it('should set handleExitMode to true initially', () => {
-      let wrapper = new ScormApiWrapper(true);
+      const wrapper = new ScormApiWrapper(true);
       expect(wrapper.handleExitMode).toBeTrue();
     });
 
     it('should set apiHandle to null initially', () => {
-      let wrapper = new ScormApiWrapper(true);
+      const wrapper = new ScormApiWrapper(true);
       expect(wrapper.apiHandle).toBeNull();
     });
 
     it('should set apiIsFound to false initially', () => {
-      let wrapper = new ScormApiWrapper(true);
+      const wrapper = new ScormApiWrapper(true);
       expect(wrapper.apiIsFound).toBeFalse();
     });
 
     it('should set connectionIsActive to false initially', () => {
-      let wrapper = new ScormApiWrapper(true);
+      const wrapper = new ScormApiWrapper(true);
       expect(wrapper.connectionIsActive).toBeFalse();
     });
   });
 
   describe('isAvailable', () => {
     it('should always return true', () => {
-      let wrapper = new ScormApiWrapper(true);
+      const wrapper = new ScormApiWrapper(true);
       expect(wrapper.isAvailable()).toBeTrue();
     });
   });
 
   describe('trace', () => {
     it('should have a trace method that calls console.log when debug mode is active', () => {
-      let wrapper = new ScormApiWrapper(true);
+      const wrapper = new ScormApiWrapper(true);
       const spy = spyOn(console, 'log');
 
       expect(wrapper.trace).toBeDefined();
@@ -59,7 +59,7 @@ describe('Wrapper', () => {
 
   describe('find', () => {
     it('should return the API from the window parent', () => {
-      let wrapper = new ScormApiWrapper(false);
+      const wrapper = new ScormApiWrapper(false);
 
       const mockWindow = {
         parent: {
@@ -73,7 +73,7 @@ describe('Wrapper', () => {
     });
 
     it('should return the API from multiple nested parent windows', () => {
-      let wrapper = new ScormApiWrapper(false);
+      const wrapper = new ScormApiWrapper(false);
 
       const mockWindow = {
         parent: {
@@ -171,15 +171,15 @@ describe('Wrapper', () => {
 
   describe('get', () => {
     beforeEach(() => {
-      window['API'] = {};
+      (window as any).API = {};
     });
 
     afterEach(() => {
-      delete window['API'];
+      delete (window as any).API;
     });
 
     it('should get the API object from the current window', () => {
-      window['API'] = {};
+      (window as any).API = {};
       const wrapper = new ScormApiWrapper(false);
 
       const result = wrapper.get();
@@ -189,11 +189,11 @@ describe('Wrapper', () => {
 
   describe('getHandle', () => {
     beforeEach(() => {
-      window['API'] = {};
+      (window as any).API = {};
     });
 
     afterEach(() => {
-      delete window['API'];
+      delete (window as any).API;
     });
 
     it('should get the API handle when it is not set', () => {
@@ -325,7 +325,7 @@ describe('Wrapper', () => {
       expect(result).toEqual(1);
     });
 
-    it('should return 0 and call the trace function when no API is found', function () {
+    it('should return 0 and call the trace function when no API is found', () => {
       const wrapper = new ScormApiWrapper(false);
       const traceSpy = spyOn(wrapper, 'trace');
 
