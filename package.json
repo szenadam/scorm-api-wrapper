@@ -5,7 +5,7 @@
   "main": "src/ScormApiWrapper.ts",
   "scripts": {
     "build": "tsc",
-    "test": "karma start",
+    "test": "karma start --browsers Chrome karma.conf.js",
     "test:ci": "karma start --single-run --browsers ChromeHeadless karma.conf.js"
   },
   "author": "szenadam",
