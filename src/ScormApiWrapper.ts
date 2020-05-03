@@ -43,7 +43,7 @@ class ScormApiWrapper {
       if (console && console.log) {
         console.log(msg);
       } else {
-        //alert(msg);
+        // ignored
       }
     }
   }
@@ -93,13 +93,10 @@ class ScormApiWrapper {
           break;
       }
     } else {
-      //If SCORM version not specified by user, look for APIs
       if (win.API_1484_11) {
-        //SCORM 2004-specific API.
         this.scormVersion = "2004";
         API = win.API_1484_11;
       } else if (win.API) {
-        //SCORM 1.2-specific API
         this.scormVersion = "1.2";
         API = win.API;
       }
@@ -128,7 +125,7 @@ class ScormApiWrapper {
    */
   public get(): any {
     let API: null;
-    let win = window;
+    const win = window;
 
     API = this.find(win);
 
@@ -170,7 +167,7 @@ class ScormApiWrapper {
    * @param errorCode {number}
    */
   public getInfo(errorCode: number): string {
-    let API = this.getHandle();
+    const API = this.getHandle();
     let result = "";
 
     if (API) {
