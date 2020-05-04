@@ -503,6 +503,31 @@ class ScormApiWrapper {
 
     return success;
   }
+
+  /**
+   * "Exists for LMS specific use. It allows the LMS to define additional
+   * diagnostic information through the API Instance."
+   * @param {number} errorCode
+   */
+  public getDiagnosticInfo(errorCode: number): string {
+    const API = this.getHandle();
+    let result = '';
+
+    if (API) {
+      switch (this.scormVersion) {
+        case '1.2':
+          result = API.LMSGetDiagnostic(errorCode);
+          break;
+        case '2004':
+          result = API.GetDiagnostic(errorCode);
+          break;
+      }
+    } else {
+      this.trace('SCORM.debug.getDiagnosticInfo failed: API is null.');
+    }
+
+    return String(result);
+  }
 }
 
 export default ScormApiWrapper;

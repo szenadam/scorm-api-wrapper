@@ -595,5 +595,37 @@ describe('Wrapper', () => {
       expect(result).toBeFalse();
       expect(traceSpy).toHaveBeenCalled();
     });
-  })
+  });
+
+  describe('getDiagnosticInfo', () => {
+    it('should return some diagnostic info from the LMS by error code when SCORM version is 2004', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.scormVersion = '2004';
+      spyOn(wrapper, 'getHandle').and.returnValue({ GetDiagnostic: () => 'foo' })
+
+      const result = wrapper.getDiagnosticInfo(1);
+
+      expect(result).toEqual('foo');
+    });
+
+    it('should return some diagnostic info from the LMS by error code when SCORM version is 1.2', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.scormVersion = '1.2';
+      spyOn(wrapper, 'getHandle').and.returnValue({ LMSGetDiagnostic: () => 'foo' })
+
+      const result = wrapper.getDiagnosticInfo(1);
+
+      expect(result).toEqual('foo');
+    });
+
+    it('should return empty string and call trace method when API is not found', () => {
+      const wrapper = new ScormApiWrapper(false);
+      const traceSpy = spyOn(wrapper, 'trace')
+
+      const result = wrapper.getDiagnosticInfo(1);
+
+      expect(result).toEqual('');
+      expect(traceSpy).toHaveBeenCalled();
+    });
+  });
 });
