@@ -89,7 +89,7 @@ describe('Wrapper', () => {
     });
   });
 
-  describe('find', () => {
+  describe('findApi', () => {
     it('should return the API from the window parent', () => {
       const wrapper = new ScormApiWrapper(false);
 
@@ -99,7 +99,7 @@ describe('Wrapper', () => {
         },
       };
 
-      const api = wrapper.find(mockWindow);
+      const api = wrapper.findApi(mockWindow);
 
       expect(api).toEqual({});
     });
@@ -121,7 +121,7 @@ describe('Wrapper', () => {
         },
       };
 
-      const api = wrapper.find(mockWindow);
+      const api = wrapper.findApi(mockWindow);
 
       expect(api).toEqual({});
       expect(api).toBe(mockWindow.parent.parent.parent.parent.parent.API);
@@ -136,7 +136,7 @@ describe('Wrapper', () => {
         },
       };
 
-      wrapper.find(mockWindow);
+      wrapper.findApi(mockWindow);
 
       expect(wrapper.scormVersion).toEqual('1.2');
     });
@@ -150,7 +150,7 @@ describe('Wrapper', () => {
         },
       };
 
-      wrapper.find(mockWindow);
+      wrapper.findApi(mockWindow);
 
       expect(wrapper.scormVersion).toEqual('2004');
     });
@@ -165,7 +165,7 @@ describe('Wrapper', () => {
         },
       };
 
-      const result = wrapper.find(mockWindow);
+      const result = wrapper.findApi(mockWindow);
 
       expect(result).toEqual({});
       expect(result).toBe(mockWindow.parent.API_1484_11);
@@ -181,7 +181,7 @@ describe('Wrapper', () => {
         },
       };
 
-      const result = wrapper.find(mockWindow);
+      const result = wrapper.findApi(mockWindow);
 
       expect(result).toEqual({});
       expect(result).toBe(mockWindow.parent.API);
@@ -192,10 +192,10 @@ describe('Wrapper', () => {
       const spy = spyOn(wrapper, 'trace');
 
       wrapper.scormVersion = '1.2';
-      wrapper.find({});
+      wrapper.findApi({});
 
       wrapper.scormVersion = '2004';
-      wrapper.find({});
+      wrapper.findApi({});
 
       expect(spy).toHaveBeenCalledTimes(4);
     });

@@ -199,7 +199,7 @@ class ScormApiWrapper {
    * Looks for an object named API in parent and opener windows
    * @param win the window object
    */
-  public find(win: any): any {
+  public findApi(win: any): any {
     let API = null;
     let findAttempts = 0;
     const findAttemptLimit = 500;
@@ -274,18 +274,18 @@ class ScormApiWrapper {
     let API: null;
     const win = window;
 
-    API = this.find(win);
+    API = this.findApi(win);
 
     if (!API && win.parent && win.parent != win) {
-      API = this.find(win.parent);
+      API = this.findApi(win.parent);
     }
 
     if (!API && win.top && win.top.opener) {
-      API = this.find(win.top.opener);
+      API = this.findApi(win.top.opener);
     }
 
     if (!API && win.top && win.top.opener && win.top.opener.document) {
-      API = this.find(win.top.opener.document);
+      API = this.findApi(win.top.opener.document);
     }
 
     if (API) {
