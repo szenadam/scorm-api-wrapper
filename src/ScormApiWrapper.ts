@@ -37,7 +37,7 @@ class ScormApiWrapper {
     this.trace('connection.initialize called.');
 
     if (!this.connectionIsActive) {
-      const API = this.getHandle();
+      const API = this.getApiHandle();
       let errorCode = 0;
 
       if (API) {
@@ -125,7 +125,7 @@ class ScormApiWrapper {
     const traceMsgPrefix = 'ScormApiWrapper.terminate ';
 
     if (this.connectionIsActive) {
-      const API = this.getHandle();
+      const API = this.getApiHandle();
       let errorCode = 0;
 
       if (API) {
@@ -300,7 +300,7 @@ class ScormApiWrapper {
   /**
    * Returns the handle to API object if it was previously set
    */
-  public getHandle(): any {
+  public getApiHandle(): any {
     if (!this.apiHandle && !this.apiIsFound) {
       this.apiHandle = this.getApi();
     }
@@ -312,7 +312,7 @@ class ScormApiWrapper {
    * Requests the error code for the current error state from the LMS
    */
   public getCode(): number {
-    const API = this.getHandle();
+    const API = this.getApiHandle();
     let code = 0;
 
     if (API) {
@@ -346,7 +346,7 @@ class ScormApiWrapper {
     const traceMsgPrefix = 'ScormApiWrapper.dataGet(\'' + parameter + '\') ';
 
     if (this.connectionIsActive) {
-      const API = this.getHandle();
+      const API = this.getApiHandle();
       let errorCode = 0;
 
       if (API) {
@@ -406,7 +406,7 @@ class ScormApiWrapper {
     const traceMsgPrefix = 'ScormApiWrapper.dataSet(\'' + parameter + '\') ';
 
     if (this.connectionIsActive) {
-      const API = this.getHandle();
+      const API = this.getApiHandle();
       let errorCode = 0;
 
       if (API) {
@@ -495,7 +495,7 @@ class ScormApiWrapper {
     const traceMsgPrefix = 'ScormApiWrapper.save failed';
 
     if (this.connectionIsActive) {
-      const API = this.getHandle();
+      const API = this.getApiHandle();
       if (API) {
         switch (this.scormVersion) {
           case '1.2':
@@ -535,7 +535,7 @@ class ScormApiWrapper {
    * @param errorCode {number}
    */
   public getInfo(errorCode: number): string {
-    const API = this.getHandle();
+    const API = this.getApiHandle();
     let result = '';
 
     if (API) {
@@ -560,7 +560,7 @@ class ScormApiWrapper {
    * @param {number} errorCode
    */
   public getDiagnosticInfo(errorCode: number): string {
-    const API = this.getHandle();
+    const API = this.getApiHandle();
     let result = '';
 
     if (API) {

@@ -44,7 +44,7 @@ describe('Wrapper', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.scormVersion = '2004';
       wrapper.handleCompletionStatus = true;
-      spyOn(wrapper, 'getHandle').and.returnValue({ Initialize: () => 'true' });
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ Initialize: () => 'true' });
       spyOn(wrapper, 'getCode').and.returnValue(0);
       spyOn(wrapper, 'status').and.returnValue(true);
       spyOn(wrapper, 'save').and.returnValue(true);
@@ -73,7 +73,7 @@ describe('Wrapper', () => {
       wrapper.handleExitMode = true;
       wrapper.dataExitStatus = '';
       wrapper.scormVersion = '2004';
-      spyOn(wrapper, 'getHandle').and.returnValue({ Terminate: () => 'true' })
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ Terminate: () => 'true' })
       spyOn(wrapper, 'dataSet').and.returnValue(true);
 
       const result = wrapper.terminate();
@@ -219,7 +219,7 @@ describe('Wrapper', () => {
     });
   });
 
-  describe('getHandle', () => {
+  describe('getApiHandle', () => {
     beforeEach(() => {
       (window as any).API = {};
     });
@@ -231,7 +231,7 @@ describe('Wrapper', () => {
     it('should get the API handle when it is not set', () => {
       const wrapper = new ScormApiWrapper(false);
 
-      const handle = wrapper.getHandle();
+      const handle = wrapper.getApiHandle();
 
       expect(wrapper.apiHandle).toEqual({});
       expect(handle).toEqual({});
@@ -242,7 +242,7 @@ describe('Wrapper', () => {
     it('should return the current error code from the LMS when SCORM version is 1.2', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.scormVersion = '1.2';
-      spyOn(wrapper, 'getHandle').and.returnValue({ LMSGetLastError: () => '1' });
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ LMSGetLastError: () => '1' });
 
       const result = wrapper.getCode();
 
@@ -252,7 +252,7 @@ describe('Wrapper', () => {
     it('should return the current error code from the LMS when SCORM version is 2004', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.scormVersion = '2004';
-      spyOn(wrapper, 'getHandle').and.returnValue({ GetLastError: () => '1' });
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ GetLastError: () => '1' });
 
       const result = wrapper.getCode();
 
@@ -275,7 +275,7 @@ describe('Wrapper', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.connectionIsActive = true;
       wrapper.scormVersion = '1.2';
-      spyOn(wrapper, 'getHandle').and.returnValue({ LMSGetValue: () => 'foo' });
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ LMSGetValue: () => 'foo' });
       spyOn(wrapper, 'getCode').and.returnValue(0);
 
       const result = wrapper.dataGet('parameter');
@@ -287,7 +287,7 @@ describe('Wrapper', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.connectionIsActive = true;
       wrapper.scormVersion = '2004';
-      spyOn(wrapper, 'getHandle').and.returnValue({ GetValue: () => 'foo' });
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ GetValue: () => 'foo' });
       spyOn(wrapper, 'getCode').and.returnValue(0);
 
       const result = wrapper.dataGet('parameter');
@@ -321,7 +321,7 @@ describe('Wrapper', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.connectionIsActive = true;
       wrapper.scormVersion = '2004';
-      spyOn(wrapper, 'getHandle').and.returnValue({ GetValue: () => '' });
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ GetValue: () => '' });
       spyOn(wrapper, 'getCode').and.returnValue(0);
       const traceSpy = spyOn(wrapper, 'trace');
 
@@ -335,7 +335,7 @@ describe('Wrapper', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.connectionIsActive = true;
       wrapper.scormVersion = '2004';
-      spyOn(wrapper, 'getHandle').and.returnValue({ GetValue: () => 'foo' });
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ GetValue: () => 'foo' });
       spyOn(wrapper, 'getCode').and.returnValue(0);
 
       wrapper.dataGet('cmi.completion_status');
@@ -347,7 +347,7 @@ describe('Wrapper', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.connectionIsActive = true;
       wrapper.scormVersion = '2004';
-      spyOn(wrapper, 'getHandle').and.returnValue({ GetValue: () => 'foo' });
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ GetValue: () => 'foo' });
       spyOn(wrapper, 'getCode').and.returnValue(0);
 
       wrapper.dataGet('cmi.exit');
@@ -361,7 +361,7 @@ describe('Wrapper', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.connectionIsActive = true;
       wrapper.scormVersion = '2004';
-      spyOn(wrapper, 'getHandle').and.returnValue({ SetValue: () => 'true' });
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ SetValue: () => 'true' });
 
       const result = wrapper.dataSet('parameter', 'value');
 
@@ -372,7 +372,7 @@ describe('Wrapper', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.connectionIsActive = true;
       wrapper.scormVersion = '2004';
-      spyOn(wrapper, 'getHandle').and.returnValue({ SetValue: () => 'false' });
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ SetValue: () => 'false' });
       spyOn(wrapper, 'getCode').and.returnValue(0);
       spyOn(wrapper, 'getInfo').and.returnValue('');
 
@@ -406,7 +406,7 @@ describe('Wrapper', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.connectionIsActive = true;
       wrapper.scormVersion = '2004';
-      spyOn(wrapper, 'getHandle').and.returnValue({ SetValue: () => 'false' });
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ SetValue: () => 'false' });
       spyOn(wrapper, 'stringToBoolean').and.returnValue(true);
 
       wrapper.dataSet('cmi.completion_status', 'value');
@@ -475,7 +475,7 @@ describe('Wrapper', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.connectionIsActive = true;
       wrapper.scormVersion = '2004';
-      spyOn(wrapper, 'getHandle').and.returnValue({ Commit: () => true });
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ Commit: () => true });
 
       const result = wrapper.save();
 
@@ -518,7 +518,7 @@ describe('Wrapper', () => {
   describe('getInfo', () => {
     it('should return an empty string and call trace when API is not found', () => {
       const wrapper = new ScormApiWrapper(false);
-      const getHandleSpy = spyOn(wrapper, 'getHandle').and.returnValue(null);
+      const getHandleSpy = spyOn(wrapper, 'getApiHandle').and.returnValue(null);
       const traceSpy = spyOn(wrapper, 'trace');
 
       const result = wrapper.getInfo(1);
@@ -530,7 +530,7 @@ describe('Wrapper', () => {
 
     it('should get error code when scorm version is set to 1.2', () => {
       const wrapper = new ScormApiWrapper(false);
-      const spy = spyOn(wrapper, 'getHandle').and.returnValue({
+      const spy = spyOn(wrapper, 'getApiHandle').and.returnValue({
         LMSGetErrorString: () => {
           return 'foo';
         },
@@ -545,7 +545,7 @@ describe('Wrapper', () => {
 
     it('should get error code when scorm version is set to 2004', () => {
       const wrapper = new ScormApiWrapper(false);
-      const spy = spyOn(wrapper, 'getHandle').and.returnValue({
+      const spy = spyOn(wrapper, 'getApiHandle').and.returnValue({
         GetErrorString: () => {
           return 'foo';
         },
@@ -563,7 +563,7 @@ describe('Wrapper', () => {
     it('should return some diagnostic info from the LMS by error code when SCORM version is 2004', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.scormVersion = '2004';
-      spyOn(wrapper, 'getHandle').and.returnValue({ GetDiagnostic: () => 'foo' })
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ GetDiagnostic: () => 'foo' })
 
       const result = wrapper.getDiagnosticInfo(1);
 
@@ -573,7 +573,7 @@ describe('Wrapper', () => {
     it('should return some diagnostic info from the LMS by error code when SCORM version is 1.2', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.scormVersion = '1.2';
-      spyOn(wrapper, 'getHandle').and.returnValue({ LMSGetDiagnostic: () => 'foo' })
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ LMSGetDiagnostic: () => 'foo' })
 
       const result = wrapper.getDiagnosticInfo(1);
 
