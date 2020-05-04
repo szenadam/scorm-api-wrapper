@@ -270,7 +270,7 @@ class ScormApiWrapper {
    * hierarchy and then, if necessary, in the current window's opener window
    * hierarchy (if there is an opener window).
    */
-  public get(): any {
+  public getApi(): any {
     let API: null;
     const win = window;
 
@@ -302,7 +302,7 @@ class ScormApiWrapper {
    */
   public getHandle(): any {
     if (!this.apiHandle && !this.apiIsFound) {
-      this.apiHandle = this.get();
+      this.apiHandle = this.getApi();
     }
 
     return this.apiHandle;

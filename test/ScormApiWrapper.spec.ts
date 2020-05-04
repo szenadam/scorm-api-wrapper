@@ -201,7 +201,7 @@ describe('Wrapper', () => {
     });
   });
 
-  describe('get', () => {
+  describe('getApi', () => {
     beforeEach(() => {
       (window as any).API = {};
     });
@@ -214,7 +214,7 @@ describe('Wrapper', () => {
       (window as any).API = {};
       const wrapper = new ScormApiWrapper(false);
 
-      const result = wrapper.get();
+      const result = wrapper.getApi();
       expect(result).toEqual({});
     });
   });
