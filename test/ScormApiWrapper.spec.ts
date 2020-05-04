@@ -2,7 +2,7 @@ import 'jasmine';
 import ScormApiWrapper from '../src/ScormApiWrapper';
 
 describe('Wrapper', () => {
-  describe('initialization', () => {
+  describe('class initialization', () => {
     it('debug mode should be set to true', () => {
       const wrapper = new ScormApiWrapper(true);
       expect(wrapper.debug).toBe(true);
@@ -39,21 +39,53 @@ describe('Wrapper', () => {
     });
   });
 
+  describe('initialize', () => {
+    it('should return true and set connectionIsActive to true when successfully initialized', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.scormVersion = '2004';
+      wrapper.handleCompletionStatus = true;
+      spyOn(wrapper, 'getHandle').and.returnValue({ Initialize: () => 'true' });
+      spyOn(wrapper, 'getCode').and.returnValue(0);
+      spyOn(wrapper, 'status').and.returnValue(true);
+      spyOn(wrapper, 'save').and.returnValue(true);
+
+      const result = wrapper.initialize();
+
+      expect(result).toBeTrue();
+      expect(wrapper.connectionIsActive).toBeTrue();
+    });
+
+    it('should return false and call trace when already initialized', () => {
+      const wrapper = new ScormApiWrapper(false);
+      const traceSpy = spyOn(wrapper, 'trace');
+
+      const result = wrapper.initialize();
+
+      expect(result).toBeFalse();
+      expect(traceSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('terminate', () => {
+    it('should return true when session is terminated successfully', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      wrapper.handleExitMode = true;
+      wrapper.dataExitStatus = '';
+      wrapper.scormVersion = '2004';
+      spyOn(wrapper, 'getHandle').and.returnValue({ Terminate: () => 'true' })
+      spyOn(wrapper, 'dataSet').and.returnValue(true);
+
+      const result = wrapper.terminate();
+
+      expect(result).toBeTrue();
+    });
+  });
+
   describe('isAvailable', () => {
     it('should always return true', () => {
       const wrapper = new ScormApiWrapper(true);
       expect(wrapper.isAvailable()).toBeTrue();
-    });
-  });
-
-  describe('trace', () => {
-    it('should have a trace method that calls console.log when debug mode is active', () => {
-      const wrapper = new ScormApiWrapper(true);
-      const spy = spyOn(console, 'log');
-
-      expect(wrapper.trace).toBeDefined();
-      wrapper.trace('foo');
-      expect(spy).toHaveBeenCalledWith('foo');
     });
   });
 
@@ -203,104 +235,6 @@ describe('Wrapper', () => {
 
       expect(wrapper.apiHandle).toEqual({});
       expect(handle).toEqual({});
-    });
-  });
-
-  describe('getInfo', () => {
-    it('should return an empty string and call trace when API is not found', () => {
-      const wrapper = new ScormApiWrapper(false);
-      const getHandleSpy = spyOn(wrapper, 'getHandle').and.returnValue(null);
-      const traceSpy = spyOn(wrapper, 'trace');
-
-      const result = wrapper.getInfo(1);
-
-      expect(getHandleSpy).toHaveBeenCalled();
-      expect(result).toEqual('');
-      expect(traceSpy).toHaveBeenCalled();
-    });
-
-    it('should get error code when scorm version is set to 1.2', () => {
-      const wrapper = new ScormApiWrapper(false);
-      const spy = spyOn(wrapper, 'getHandle').and.returnValue({
-        LMSGetErrorString: () => {
-          return 'foo';
-        },
-      });
-      wrapper.scormVersion = '1.2';
-
-      const result = wrapper.getInfo(1);
-
-      expect(spy).toHaveBeenCalled();
-      expect(result).toEqual('foo');
-    });
-
-    it('should get error code when scorm version is set to 2004', () => {
-      const wrapper = new ScormApiWrapper(false);
-      const spy = spyOn(wrapper, 'getHandle').and.returnValue({
-        GetErrorString: () => {
-          return 'foo';
-        },
-      });
-      wrapper.scormVersion = '2004';
-
-      const result = wrapper.getInfo(1);
-
-      expect(spy).toHaveBeenCalled();
-      expect(result).toEqual('foo');
-    });
-  });
-
-  describe('stringToBoolean', () => {
-    it('should return true when input is a String object with "true', () => {
-      const wrapper = new ScormApiWrapper(false);
-
-      const result = wrapper.stringToBoolean(String('true'));
-
-      expect(result).toBeTrue();
-    });
-
-    it('should return false when input is a String object with "false"', () => {
-      const wrapper = new ScormApiWrapper(false);
-
-      const result = wrapper.stringToBoolean(String('false'));
-
-      expect(result).toBeFalse();
-    });
-
-    it('should return boolean inputs with same value', () => {
-      const wrapper = new ScormApiWrapper(false);
-
-      let result = wrapper.stringToBoolean(true);
-      expect(result).toBeTrue();
-
-      result = wrapper.stringToBoolean(false);
-      expect(result).toBeFalse();
-    });
-
-    it('should return false for the number zero', () => {
-      const wrapper = new ScormApiWrapper(false);
-
-      const result = wrapper.stringToBoolean(0);
-
-      expect(result).toBeFalse();
-    });
-
-    it('should return true for any non-zero integers', () => {
-      const wrapper = new ScormApiWrapper(false);
-
-      let result = wrapper.stringToBoolean(1);
-      expect(result).toBeTrue();
-
-      result = wrapper.stringToBoolean(-1);
-      expect(result).toBeTrue();
-    });
-
-    it('should return null for undefined value', () => {
-      const wrapper = new ScormApiWrapper(false);
-
-      const result = wrapper.stringToBoolean(undefined);
-
-      expect(result).toBeNull();
     });
   });
 
@@ -570,30 +504,58 @@ describe('Wrapper', () => {
     });
   });
 
-  describe('initialize', () => {
-    it('should return true and set connectionIsActive to true when successfully initialized', () => {
-      const wrapper = new ScormApiWrapper(false);
-      wrapper.scormVersion = '2004';
-      wrapper.handleCompletionStatus = true;
-      spyOn(wrapper, 'getHandle').and.returnValue({ Initialize: () => 'true' });
-      spyOn(wrapper, 'getCode').and.returnValue(0);
-      spyOn(wrapper, 'status').and.returnValue(true);
-      spyOn(wrapper, 'save').and.returnValue(true);
+  describe('trace', () => {
+    it('should have a trace method that calls console.log when debug mode is active', () => {
+      const wrapper = new ScormApiWrapper(true);
+      const spy = spyOn(console, 'log');
 
-      const result = wrapper.initialize();
-
-      expect(result).toBeTrue();
-      expect(wrapper.connectionIsActive).toBeTrue();
+      expect(wrapper.trace).toBeDefined();
+      wrapper.trace('foo');
+      expect(spy).toHaveBeenCalledWith('foo');
     });
+  });
 
-    it('should return false and call trace when already initialized', () => {
+  describe('getInfo', () => {
+    it('should return an empty string and call trace when API is not found', () => {
       const wrapper = new ScormApiWrapper(false);
+      const getHandleSpy = spyOn(wrapper, 'getHandle').and.returnValue(null);
       const traceSpy = spyOn(wrapper, 'trace');
 
-      const result = wrapper.initialize();
+      const result = wrapper.getInfo(1);
 
-      expect(result).toBeFalse();
+      expect(getHandleSpy).toHaveBeenCalled();
+      expect(result).toEqual('');
       expect(traceSpy).toHaveBeenCalled();
+    });
+
+    it('should get error code when scorm version is set to 1.2', () => {
+      const wrapper = new ScormApiWrapper(false);
+      const spy = spyOn(wrapper, 'getHandle').and.returnValue({
+        LMSGetErrorString: () => {
+          return 'foo';
+        },
+      });
+      wrapper.scormVersion = '1.2';
+
+      const result = wrapper.getInfo(1);
+
+      expect(spy).toHaveBeenCalled();
+      expect(result).toEqual('foo');
+    });
+
+    it('should get error code when scorm version is set to 2004', () => {
+      const wrapper = new ScormApiWrapper(false);
+      const spy = spyOn(wrapper, 'getHandle').and.returnValue({
+        GetErrorString: () => {
+          return 'foo';
+        },
+      });
+      wrapper.scormVersion = '2004';
+
+      const result = wrapper.getInfo(1);
+
+      expect(spy).toHaveBeenCalled();
+      expect(result).toEqual('foo');
     });
   });
 
@@ -629,19 +591,57 @@ describe('Wrapper', () => {
     });
   });
 
-  describe('terminate', () => {
-    it('should return true when session is terminated successfully', () => {
+  describe('stringToBoolean', () => {
+    it('should return true when input is a String object with "true', () => {
       const wrapper = new ScormApiWrapper(false);
-      wrapper.connectionIsActive = true;
-      wrapper.handleExitMode = true;
-      wrapper.dataExitStatus = '';
-      wrapper.scormVersion = '2004';
-      spyOn(wrapper, 'getHandle').and.returnValue({ Terminate: () => 'true' })
-      spyOn(wrapper, 'dataSet').and.returnValue(true);
 
-      const result = wrapper.terminate();
+      const result = wrapper.stringToBoolean(String('true'));
 
       expect(result).toBeTrue();
+    });
+
+    it('should return false when input is a String object with "false"', () => {
+      const wrapper = new ScormApiWrapper(false);
+
+      const result = wrapper.stringToBoolean(String('false'));
+
+      expect(result).toBeFalse();
+    });
+
+    it('should return boolean inputs with same value', () => {
+      const wrapper = new ScormApiWrapper(false);
+
+      let result = wrapper.stringToBoolean(true);
+      expect(result).toBeTrue();
+
+      result = wrapper.stringToBoolean(false);
+      expect(result).toBeFalse();
+    });
+
+    it('should return false for the number zero', () => {
+      const wrapper = new ScormApiWrapper(false);
+
+      const result = wrapper.stringToBoolean(0);
+
+      expect(result).toBeFalse();
+    });
+
+    it('should return true for any non-zero integers', () => {
+      const wrapper = new ScormApiWrapper(false);
+
+      let result = wrapper.stringToBoolean(1);
+      expect(result).toBeTrue();
+
+      result = wrapper.stringToBoolean(-1);
+      expect(result).toBeTrue();
+    });
+
+    it('should return null for undefined value', () => {
+      const wrapper = new ScormApiWrapper(false);
+
+      const result = wrapper.stringToBoolean(undefined);
+
+      expect(result).toBeNull();
     });
   });
 });

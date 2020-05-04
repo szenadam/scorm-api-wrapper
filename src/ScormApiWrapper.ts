@@ -27,25 +27,172 @@ class ScormApiWrapper {
   }
 
   /**
+   * Tells the LMS to initiate the communication session.
+   */
+  public initialize(): boolean {
+    let success: boolean | null = false;
+    let completionStatus = this.dataCompletionStatus;
+    const traceMsgPrefix = 'ScormApiWrapper.initialize ';
+
+    this.trace('connection.initialize called.');
+
+    if (!this.connectionIsActive) {
+      const API = this.getHandle();
+      let errorCode = 0;
+
+      if (API) {
+        switch (this.scormVersion) {
+          case '1.2':
+            success = this.stringToBoolean(API.LMSInitialize(''));
+            break;
+          case '2004':
+            success = this.stringToBoolean(API.Initialize(''));
+            break;
+        }
+
+        if (success) {
+          errorCode = this.getCode();
+
+          if (errorCode !== null && errorCode === 0) {
+            this.connectionIsActive = true;
+
+            if (this.handleCompletionStatus) {
+              completionStatus = this.status('get', null);
+
+              if (completionStatus) {
+                switch (completionStatus) {
+                  case 'not attempted':
+                    this.status('set', 'incomplete');
+                    break;
+                  // SCORM 2004 only
+                  case 'unknown':
+                    this.status('set', 'incomplete');
+                    break;
+                  // Additional options, presented here in case you'd like to use them
+                  // case "completed"  : break;
+                  // case "incomplete" : break;
+                  // case "passed"     : break;    //SCORM 1.2 only
+                  // case "failed"     : break;    //SCORM 1.2 only
+                  // case "browsed"    : break;    //SCORM 1.2 only
+                }
+                this.save();
+              }
+
+            }
+
+          } else {
+            success = false;
+            this.trace(
+              traceMsgPrefix +
+              'failed. \nError code: ' +
+              errorCode +
+              ' \nError info: ' +
+              this.getInfo(errorCode)
+            );
+          }
+        } else {
+          errorCode = this.getCode();
+
+          if (errorCode !== null && errorCode !== 0) {
+            this.trace(
+              traceMsgPrefix +
+              'failed. \nError code: ' +
+              errorCode +
+              ' \nError info: ' +
+              this.getInfo(errorCode)
+            );
+          } else {
+            this.trace(traceMsgPrefix + 'failed: No response from server.');
+          }
+        }
+      } else {
+        this.trace(traceMsgPrefix + 'failed: API is null.');
+      }
+    } else {
+      this.trace(traceMsgPrefix + 'aborted: Connection already active.');
+    }
+
+    return success;
+  }
+
+  /**
+   * Tells the LMS to terminate the communication session
+   */
+  public terminate(): boolean {
+    let success = false;
+    const exitStatus = this.dataExitStatus;
+    const completionStatus = this.dataCompletionStatus;
+    const traceMsgPrefix = 'ScormApiWrapper.terminate ';
+
+    if (this.connectionIsActive) {
+      const API = this.getHandle();
+      let errorCode = 0;
+
+      if (API) {
+
+        if (this.handleExitMode && !exitStatus) {
+          if (completionStatus !== 'completed' && completionStatus !== 'passed') {
+            switch (this.scormVersion) {
+              case '1.2':
+                success = this.dataSet('cmi.core.exit', 'suspend');
+                break;
+              case '2004':
+                success = this.dataSet('cmi.exit', 'suspend');
+                break;
+            }
+          } else {
+            switch (this.scormVersion) {
+              case '1.2':
+                success = this.dataSet('cmi.core.exit', 'logout');
+                break;
+              case '2004':
+                success = this.dataSet('cmi.exit', 'normal');
+                break;
+            }
+          }
+        }
+
+        success = this.scormVersion === '1.2' ? this.save() : true;
+
+        if (success) {
+          switch (this.scormVersion) {
+            case '1.2':
+              success = this.stringToBoolean(API.LMSFinish(''));
+              break;
+            case '2004':
+              success = this.stringToBoolean(API.Terminate(''));
+              break;
+          }
+
+          if (success) {
+            this.connectionIsActive = false;
+          } else {
+            errorCode = this.getCode();
+            this.trace(
+              traceMsgPrefix +
+              'failed. \nError code: ' +
+              errorCode +
+              ' \nError info: ' +
+              this.getInfo(errorCode)
+            );
+          }
+        }
+      } else {
+        this.trace(traceMsgPrefix + 'failed: API is null.');
+      }
+    } else {
+      this.trace(traceMsgPrefix + 'aborted: Connection already terminated.');
+    }
+
+    return success;
+  }
+
+  /**
    * A simple function to allow Flash ExternalInterface to confirm
    * presence of JS wrapper before attempting any LMS communication.
    */
   public isAvailable(): boolean {
     return true;
-  }
-
-  /**
-   * Displays error messages when in debug mode.
-   * @param msg message to be displayed
-   */
-  public trace(msg: string): void {
-    if (this.debug) {
-      if (console && console.log) {
-        console.log(msg);
-      } else {
-        // ignored
-      }
-    }
   }
 
   /**
@@ -159,53 +306,6 @@ class ScormApiWrapper {
     }
 
     return this.apiHandle;
-  }
-
-  /**
-   * "Used by a SCO to request the textual description for the error code
-   * specified by the value of [errorCode]."
-   * @param errorCode {number}
-   */
-  public getInfo(errorCode: number): string {
-    const API = this.getHandle();
-    let result = '';
-
-    if (API) {
-      switch (this.scormVersion) {
-        case '1.2':
-          result = API.LMSGetErrorString(errorCode.toString());
-          break;
-        case '2004':
-          result = API.GetErrorString(errorCode.toString());
-          break;
-      }
-    } else {
-      this.trace('ScormApiWrapper.getInfo failed: API is null.');
-    }
-
-    return String(result);
-  }
-
-  /**
-   * Converts 'boolean strings' into actual valid booleans.
-   * (Most values returned from the API are the strings "true" and "false".)
-   * @param value
-   */
-  public stringToBoolean(value: any): boolean | null {
-    const valueType = typeof value;
-    switch (valueType) {
-      case 'object':
-      case 'string':
-        return /(true|1)/i.test(value);
-      case 'number':
-        return !!value;
-      case 'boolean':
-        return value;
-      case 'undefined':
-        return null;
-      default:
-        return false;
-    }
   }
 
   /**
@@ -416,92 +516,42 @@ class ScormApiWrapper {
   }
 
   /**
-   * Tells the LMS to initiate the communication session.
+   * Displays error messages when in debug mode.
+   * @param msg message to be displayed
    */
-  public initialize(): boolean {
-    let success: boolean | null = false;
-    let completionStatus = this.dataCompletionStatus;
-    const traceMsgPrefix = 'ScormApiWrapper.initialize ';
-
-    this.trace('connection.initialize called.');
-
-    if (!this.connectionIsActive) {
-      const API = this.getHandle();
-      let errorCode = 0;
-
-      if (API) {
-        switch (this.scormVersion) {
-          case '1.2':
-            success = this.stringToBoolean(API.LMSInitialize(''));
-            break;
-          case '2004':
-            success = this.stringToBoolean(API.Initialize(''));
-            break;
-        }
-
-        if (success) {
-          errorCode = this.getCode();
-
-          if (errorCode !== null && errorCode === 0) {
-            this.connectionIsActive = true;
-
-            if (this.handleCompletionStatus) {
-              completionStatus = this.status('get', null);
-
-              if (completionStatus) {
-                switch (completionStatus) {
-                  case 'not attempted':
-                    this.status('set', 'incomplete');
-                    break;
-                  // SCORM 2004 only
-                  case 'unknown':
-                    this.status('set', 'incomplete');
-                    break;
-                  // Additional options, presented here in case you'd like to use them
-                  // case "completed"  : break;
-                  // case "incomplete" : break;
-                  // case "passed"     : break;    //SCORM 1.2 only
-                  // case "failed"     : break;    //SCORM 1.2 only
-                  // case "browsed"    : break;    //SCORM 1.2 only
-                }
-                this.save();
-              }
-
-            }
-
-          } else {
-            success = false;
-            this.trace(
-              traceMsgPrefix +
-              'failed. \nError code: ' +
-              errorCode +
-              ' \nError info: ' +
-              this.getInfo(errorCode)
-            );
-          }
-        } else {
-          errorCode = this.getCode();
-
-          if (errorCode !== null && errorCode !== 0) {
-            this.trace(
-              traceMsgPrefix +
-              'failed. \nError code: ' +
-              errorCode +
-              ' \nError info: ' +
-              this.getInfo(errorCode)
-            );
-          } else {
-            this.trace(traceMsgPrefix + 'failed: No response from server.');
-          }
-        }
+  public trace(msg: string): void {
+    if (this.debug) {
+      if (console && console.log) {
+        console.log(msg);
       } else {
-        this.trace(traceMsgPrefix + 'failed: API is null.');
+        // ignored
+      }
+    }
+  }
+
+  /**
+   * "Used by a SCO to request the textual description for the error code
+   * specified by the value of [errorCode]."
+   * @param errorCode {number}
+   */
+  public getInfo(errorCode: number): string {
+    const API = this.getHandle();
+    let result = '';
+
+    if (API) {
+      switch (this.scormVersion) {
+        case '1.2':
+          result = API.LMSGetErrorString(errorCode.toString());
+          break;
+        case '2004':
+          result = API.GetErrorString(errorCode.toString());
+          break;
       }
     } else {
-      this.trace(traceMsgPrefix + 'aborted: Connection already active.');
+      this.trace('ScormApiWrapper.getInfo failed: API is null.');
     }
 
-    return success;
+    return String(result);
   }
 
   /**
@@ -530,75 +580,25 @@ class ScormApiWrapper {
   }
 
   /**
-   * Tells the LMS to terminate the communication session
+   * Converts 'boolean strings' into actual valid booleans.
+   * (Most values returned from the API are the strings "true" and "false".)
+   * @param value
    */
-  public terminate(): boolean {
-    let success = false;
-    const exitStatus = this.dataExitStatus;
-    const completionStatus = this.dataCompletionStatus;
-    const traceMsgPrefix = 'ScormApiWrapper.terminate ';
-
-    if (this.connectionIsActive) {
-      const API = this.getHandle();
-      let errorCode = 0;
-
-      if (API) {
-
-        if (this.handleExitMode && !exitStatus) {
-          if (completionStatus !== 'completed' && completionStatus !== 'passed') {
-            switch (this.scormVersion) {
-              case '1.2':
-                success = this.dataSet('cmi.core.exit', 'suspend');
-                break;
-              case '2004':
-                success = this.dataSet('cmi.exit', 'suspend');
-                break;
-            }
-          } else {
-            switch (this.scormVersion) {
-              case '1.2':
-                success = this.dataSet('cmi.core.exit', 'logout');
-                break;
-              case '2004':
-                success = this.dataSet('cmi.exit', 'normal');
-                break;
-            }
-          }
-        }
-
-        success = this.scormVersion === '1.2' ? this.save() : true;
-
-        if (success) {
-          switch (this.scormVersion) {
-            case '1.2':
-              success = this.stringToBoolean(API.LMSFinish(''));
-              break;
-            case '2004':
-              success = this.stringToBoolean(API.Terminate(''));
-              break;
-          }
-
-          if (success) {
-            this.connectionIsActive = false;
-          } else {
-            errorCode = this.getCode();
-            this.trace(
-              traceMsgPrefix +
-              'failed. \nError code: ' +
-              errorCode +
-              ' \nError info: ' +
-              this.getInfo(errorCode)
-            );
-          }
-        }
-      } else {
-        this.trace(traceMsgPrefix + 'failed: API is null.');
-      }
-    } else {
-      this.trace(traceMsgPrefix + 'aborted: Connection already terminated.');
+  public stringToBoolean(value: any): boolean | null {
+    const valueType = typeof value;
+    switch (valueType) {
+      case 'object':
+      case 'string':
+        return /(true|1)/i.test(value);
+      case 'number':
+        return !!value;
+      case 'boolean':
+        return value;
+      case 'undefined':
+        return null;
+      default:
+        return false;
     }
-
-    return success;
   }
 }
 
