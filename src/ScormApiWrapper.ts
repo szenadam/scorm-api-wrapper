@@ -343,7 +343,7 @@ class ScormApiWrapper {
    */
   public dataGet(parameter: string): string {
     let value = null;
-    const traceMsgPrefix = 'ScormApiWrapper.get(\'' + parameter + '\') ';
+    const traceMsgPrefix = 'ScormApiWrapper.dataGet(\'' + parameter + '\') ';
 
     if (this.connectionIsActive) {
       const API = this.getHandle();
