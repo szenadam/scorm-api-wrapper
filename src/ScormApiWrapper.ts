@@ -62,9 +62,6 @@ class ScormApiWrapper {
               if (completionStatus) {
                 switch (completionStatus) {
                   case 'not attempted':
-                    this.status('set', 'incomplete');
-                    break;
-                  // SCORM 2004 only
                   case 'unknown':
                     this.status('set', 'incomplete');
                     break;
