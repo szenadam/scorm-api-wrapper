@@ -56,7 +56,7 @@ class ScormApiWrapper {
     let API = null;
     let findAttempts = 0;
     const findAttemptLimit = 500;
-    const traceMsgPrefix = 'SCORM.API.find';
+    const traceMsgPrefix = 'ScormApiWrapper.find';
 
     while (
       !win.API &&
@@ -180,7 +180,7 @@ class ScormApiWrapper {
           break;
       }
     } else {
-      this.trace('SCORM.debug.getInfo failed: API is null.');
+      this.trace('ScormApiWrapper.getInfo failed: API is null.');
     }
 
     return String(result);
@@ -225,7 +225,7 @@ class ScormApiWrapper {
           break;
       }
     } else {
-      this.trace('SCORM.debug.getCode failed: API is null.');
+      this.trace('ScormApiWrapper.getCode failed: API is null.');
     }
 
     return code;
@@ -243,7 +243,7 @@ class ScormApiWrapper {
    */
   public dataGet(parameter: string): string {
     let value = null;
-    const traceMsgPrefix = 'SCORM.data.get(\'' + parameter + '\') ';
+    const traceMsgPrefix = 'ScormApiWrapper.get(\'' + parameter + '\') ';
 
     if (this.connectionIsActive) {
       const API = this.getHandle();
@@ -296,14 +296,14 @@ class ScormApiWrapper {
   /**
    * Tells the LMS to assign the value to the named data model element.
    * Also stores the SCO's completion status in a variable named
-   * ScormApiWrapper.SCORM.data.completionStatus. This variable is checked whenever
-   * ScormApiWrapper.SCORM.connection.terminate() is invoked.
+   * ScormApiWrapper.completionStatus. This variable is checked whenever
+   * ScormApiWrapper.terminate() is invoked.
    * @param parameter {string} The data model element
    * @param value {string} The value for the data model element
    */
   public dataSet(parameter: string, value: string): boolean | null {
     let success: boolean | null = false;
-    const traceMsgPrefix = 'SCORM.data.set(\'' + parameter + '\') ';
+    const traceMsgPrefix = 'ScormApiWrapper.dataSet(\'' + parameter + '\') ';
 
     if (this.connectionIsActive) {
       const API = this.getHandle();
@@ -351,7 +351,7 @@ class ScormApiWrapper {
 
   public status(action: string, status: string): string | boolean | null {
     let success: string | boolean | null = false;
-    const traceMsgPrefix = 'SCORM.getStatus failed';
+    const traceMsgPrefix = 'ScormApiWrapper.status failed';
     let cmi = '';
 
     if (action !== null) {
@@ -392,7 +392,7 @@ class ScormApiWrapper {
    */
   public save(): boolean | null {
     let success: boolean | null = false;
-    const traceMsgPrefix = 'SCORM.data.save failed';
+    const traceMsgPrefix = 'ScormApiWrapper.save failed';
 
     if (this.connectionIsActive) {
       const API = this.getHandle();
@@ -421,7 +421,7 @@ class ScormApiWrapper {
   public initialize(): boolean {
     let success: boolean | null = false;
     let completionStatus = this.dataCompletionStatus;
-    const traceMsgPrefix = 'SCORM.connection.initialize ';
+    const traceMsgPrefix = 'ScormApiWrapper.initialize ';
 
     this.trace('connection.initialize called.');
 
@@ -523,7 +523,7 @@ class ScormApiWrapper {
           break;
       }
     } else {
-      this.trace('SCORM.debug.getDiagnosticInfo failed: API is null.');
+      this.trace('ScormApiWrapper.getDiagnosticInfo failed: API is null.');
     }
 
     return String(result);
@@ -536,7 +536,7 @@ class ScormApiWrapper {
     let success = false;
     const exitStatus = this.dataExitStatus;
     const completionStatus = this.dataCompletionStatus;
-    const traceMsgPrefix = 'SCORM.connection.terminate ';
+    const traceMsgPrefix = 'ScormApiWrapper.terminate ';
 
     if (this.connectionIsActive) {
       const API = this.getHandle();
