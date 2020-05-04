@@ -628,4 +628,20 @@ describe('Wrapper', () => {
       expect(traceSpy).toHaveBeenCalled();
     });
   });
+
+  describe('terminate', () => {
+    it('should return true when session is terminated successfully', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      wrapper.handleExitMode = true;
+      wrapper.dataExitStatus = '';
+      wrapper.scormVersion = '2004';
+      spyOn(wrapper, 'getHandle').and.returnValue({ Terminate: () => 'true' })
+      spyOn(wrapper, 'dataSet').and.returnValue(true);
+
+      const result = wrapper.terminate();
+
+      expect(result).toBeTrue();
+    });
+  });
 });

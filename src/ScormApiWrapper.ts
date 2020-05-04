@@ -528,6 +528,78 @@ class ScormApiWrapper {
 
     return String(result);
   }
+
+  /**
+   * Tells the LMS to terminate the communication session
+   */
+  public terminate(): boolean {
+    let success = false;
+    const exitStatus = this.dataExitStatus;
+    const completionStatus = this.dataCompletionStatus;
+    const traceMsgPrefix = 'SCORM.connection.terminate ';
+
+    if (this.connectionIsActive) {
+      const API = this.getHandle();
+      let errorCode = 0;
+
+      if (API) {
+
+        if (this.handleExitMode && !exitStatus) {
+          if (completionStatus !== 'completed' && completionStatus !== 'passed') {
+            switch (this.scormVersion) {
+              case '1.2':
+                success = this.dataSet('cmi.core.exit', 'suspend');
+                break;
+              case '2004':
+                success = this.dataSet('cmi.exit', 'suspend');
+                break;
+            }
+          } else {
+            switch (this.scormVersion) {
+              case '1.2':
+                success = this.dataSet('cmi.core.exit', 'logout');
+                break;
+              case '2004':
+                success = this.dataSet('cmi.exit', 'normal');
+                break;
+            }
+          }
+        }
+
+        success = this.scormVersion === '1.2' ? this.save() : true;
+
+        if (success) {
+          switch (this.scormVersion) {
+            case '1.2':
+              success = this.stringToBoolean(API.LMSFinish(''));
+              break;
+            case '2004':
+              success = this.stringToBoolean(API.Terminate(''));
+              break;
+          }
+
+          if (success) {
+            this.connectionIsActive = false;
+          } else {
+            errorCode = this.getCode();
+            this.trace(
+              traceMsgPrefix +
+              'failed. \nError code: ' +
+              errorCode +
+              ' \nError info: ' +
+              this.getInfo(errorCode)
+            );
+          }
+        }
+      } else {
+        this.trace(traceMsgPrefix + 'failed: API is null.');
+      }
+    } else {
+      this.trace(traceMsgPrefix + 'aborted: Connection already terminated.');
+    }
+
+    return success;
+  }
 }
 
 export default ScormApiWrapper;
