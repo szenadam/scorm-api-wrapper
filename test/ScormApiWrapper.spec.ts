@@ -10,7 +10,7 @@ describe('Wrapper', () => {
 
     it('should set scorm version to null initially', () => {
       const wrapper = new ScormApiWrapper(true);
-      expect(wrapper.scormVersion).toBeNull();
+      expect(wrapper.scormVersion).toEqual('');
     });
 
     it('should set handleCompletionStatus to true initially', () => {

@@ -1,6 +1,6 @@
 class ScormApiWrapper {
   public apiHandle: any;
-  public scormVersion: any;
+  public scormVersion: string;
 
   public debug: boolean;
   public handleCompletionStatus: boolean;
@@ -14,7 +14,7 @@ class ScormApiWrapper {
   constructor(debug: boolean) {
     this.debug = debug;
 
-    this.scormVersion = null;
+    this.scormVersion = '';
     this.apiHandle = null;
 
     this.dataCompletionStatus = null;
