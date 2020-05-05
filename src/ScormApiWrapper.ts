@@ -57,7 +57,7 @@ class ScormApiWrapper {
             this.connectionIsActive = true;
 
             if (this.handleCompletionStatus) {
-              completionStatus = this.status('get', null);
+              completionStatus = this.status('get', '');
 
               if (completionStatus) {
                 switch (completionStatus) {
@@ -466,7 +466,7 @@ class ScormApiWrapper {
           success = this.dataGet(cmi);
           break;
         case 'set':
-          if (status !== null) {
+          if (status !== '') {
             success = this.dataSet(cmi, status);
           } else {
             success = false;

@@ -441,7 +441,7 @@ describe('Wrapper', () => {
       wrapper.scormVersion = '2004';
       const traceSpy = spyOn(wrapper, 'trace');
 
-      const result = wrapper.status(null, 'status');
+      const result = wrapper.status('', 'status');
 
       expect(result).toEqual(false);
       expect(traceSpy).toHaveBeenCalled();
@@ -452,7 +452,7 @@ describe('Wrapper', () => {
       wrapper.scormVersion = '2004';
       const traceSpy = spyOn(wrapper, 'trace');
 
-      const result = wrapper.status('set', null);
+      const result = wrapper.status('set', '');
 
       expect(result).toEqual(false);
       expect(traceSpy).toHaveBeenCalled();
