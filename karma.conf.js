@@ -5,6 +5,9 @@ module.exports = function (config) {
     preprocessors: {
       "**/*.ts": "karma-typescript",
     },
+    client: {
+      clearContext: false // leave Jasmine Spec Runner output visible in browser
+    },
     reporters: ["progress", "karma-typescript", "kjhtml"],
     browsers: ["Chrome", "ChromeHeadless"],
   });
