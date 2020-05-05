@@ -34,7 +34,7 @@ class ScormApiWrapper {
     let completionStatus = this.dataCompletionStatus;
     const traceMsgPrefix = 'ScormApiWrapper.initialize ';
 
-    this.trace('connection.initialize called.');
+    this.trace('initialize called.');
 
     if (!this.connectionIsActive) {
       const API = this.getApiHandle();
@@ -119,7 +119,7 @@ class ScormApiWrapper {
     let success = false;
     const exitStatus = this.dataExitStatus;
     const completionStatus = this.dataCompletionStatus;
-    const traceMsgPrefix = 'ScormApiWrapper.terminate ';
+    const traceMsgPrefix = 'terminate ';
 
     if (this.connectionIsActive) {
       const API = this.getApiHandle();
