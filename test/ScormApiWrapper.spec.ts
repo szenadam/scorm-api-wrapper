@@ -5,7 +5,7 @@ describe('Wrapper', () => {
   describe('class initialization', () => {
     it('debug mode should be set to true', () => {
       const wrapper = new ScormApiWrapper(true);
-      expect(wrapper.debug).toBe(true);
+      expect(wrapper.debugModeEnabled).toBe(true);
     });
 
     it('should set scorm version to null initially', () => {

@@ -2,7 +2,7 @@ class ScormApiWrapper {
   public apiHandle: any;
   public scormVersion: string;
 
-  public debug: boolean;
+  public debugModeEnabled: boolean;
   public handleCompletionStatus: boolean;
   public handleExitMode: boolean;
   public apiIsFound: boolean;
@@ -12,7 +12,7 @@ class ScormApiWrapper {
   public dataExitStatus: any;
 
   constructor(debug: boolean) {
-    this.debug = debug;
+    this.debugModeEnabled = debug;
 
     this.scormVersion = '';
     this.apiHandle = null;
@@ -517,7 +517,7 @@ class ScormApiWrapper {
    * @param msg message to be displayed
    */
   public trace(msg: string): void {
-    if (this.debug) {
+    if (this.debugModeEnabled) {
       if (console && console.log) {
         console.log(msg);
       } else {
