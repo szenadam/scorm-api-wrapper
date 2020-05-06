@@ -581,7 +581,7 @@ class ScormApiWrapper {
    * (Most values returned from the API are the strings "true" and "false".)
    * @param value
    */
-  public stringToBoolean(value: any): boolean | null {
+  public stringToBoolean(value: any): boolean {
     const valueType = typeof value;
     switch (valueType) {
       case 'object':
@@ -592,7 +592,7 @@ class ScormApiWrapper {
       case 'boolean':
         return value;
       case 'undefined':
-        return null;
+        return false;
       default:
         return false;
     }

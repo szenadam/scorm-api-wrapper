@@ -641,7 +641,7 @@ describe('Wrapper', () => {
 
       const result = wrapper.stringToBoolean(undefined);
 
-      expect(result).toBeNull();
+      expect(result).toBeFalse();
     });
   });
 });
