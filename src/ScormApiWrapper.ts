@@ -487,8 +487,8 @@ class ScormApiWrapper {
   /**
    * Instructs the LMS to persist all data to this point in the session
    */
-  public save(): boolean | null {
-    let success: boolean | null = false;
+  public save(): boolean {
+    let success: boolean = false;
     const traceMsgPrefix = 'ScormApiWrapper.save failed';
 
     if (this.connectionIsActive) {
