@@ -23,3 +23,20 @@ A modernized reimplementation of the SCORM API Wrapper inspired by
 ## Contributing
 
 Contributions are welcomed.
+
+## Changelog
+
+### v1.1.0
+
+- Rename functions to be more readable
+- Fix log messages to reflect the new code
+- Fix Karma reporter to show test results
+- Type check test builds with base tsconfig
+- Modify functions to have only one return type to allow strict null check.
+
+### v1.0.0
+
+- Copied every function from old code.
+- Implemented the whole wrapper object as a single class with every property and function as public.
+- Return types were taken from the old code.
+- Class property names were changed a bit to reflect the nested structure of the old code.
