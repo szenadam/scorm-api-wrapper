@@ -398,8 +398,8 @@ class ScormApiWrapper {
    * @param parameter {string} The data model element
    * @param value {string} The value for the data model element
    */
-  public dataSet(parameter: string, value: string): boolean | null {
-    let success: boolean | null = false;
+  public dataSet(parameter: string, value: string): boolean {
+    let success: boolean = false;
     const traceMsgPrefix = 'ScormApiWrapper.dataSet(\'' + parameter + '\') ';
 
     if (this.connectionIsActive) {
