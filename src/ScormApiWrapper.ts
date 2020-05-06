@@ -339,7 +339,7 @@ class ScormApiWrapper {
    * @param {string} parameter parameter name of the SCORM data model element
    */
   public dataGet(parameter: string): string {
-    let value = null;
+    let value = '';
     const traceMsgPrefix = 'ScormApiWrapper.dataGet(\'' + parameter + '\') ';
 
     if (this.connectionIsActive) {
