@@ -446,8 +446,8 @@ class ScormApiWrapper {
     return success;
   }
 
-  public status(action: string, status: string): string | boolean | null {
-    let success: string | boolean | null = false;
+  public status(action: string, status: string): string | boolean {
+    let success: string | boolean = false;
     const traceMsgPrefix = 'ScormApiWrapper.status failed';
     let cmi = '';
 
