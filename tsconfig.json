@@ -5,7 +5,7 @@
     "removeComments": true,
     "outDir": "dist",
     "strict": true,
-    "strictNullChecks": false
+    "strictNullChecks": true
   },
   "files": ["src/ScormApiWrapper.ts"]
 }
