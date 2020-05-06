@@ -1,3 +1,5 @@
+const tsconfig = require('./tsconfig.json');
+
 module.exports = function (config) {
   config.set({
     frameworks: ["jasmine", "karma-typescript"],
@@ -10,5 +12,8 @@ module.exports = function (config) {
     },
     reporters: ["progress", "karma-typescript", "kjhtml"],
     browsers: ["Chrome", "ChromeHeadless"],
+    karmaTypescriptConfig: {
+      compilerOptions: {...tsconfig.compilerOptions},
+    }
   });
 };
