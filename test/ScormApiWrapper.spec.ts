@@ -295,25 +295,25 @@ describe('Wrapper', () => {
       expect(result).toEqual('foo');
     });
 
-    it('should return "null" (string) and call trace function when connection is not initialized', () => {
+    it('should return empty string and call trace function when connection is not initialized', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.connectionIsActive = false;
       const traceSpy = spyOn(wrapper, 'trace');
 
       const result = wrapper.dataGet('parameter');
 
-      expect(result).toEqual('null');
+      expect(result).toEqual('');
       expect(traceSpy).toHaveBeenCalled();
     });
 
-    it('should return "null" (string) and call trace function when API is null', () => {
+    it('should return empty string and call trace function when API is null', () => {
       const wrapper = new ScormApiWrapper(false);
       wrapper.connectionIsActive = true;
       const traceSpy = spyOn(wrapper, 'trace');
 
       const result = wrapper.dataGet('parameter');
 
-      expect(result).toEqual('null');
+      expect(result).toEqual('');
       expect(traceSpy).toHaveBeenCalled();
     });
 
