@@ -1,6 +1,6 @@
 {
   "name": "scorm-api-wrapper",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "SCORM API Wrapper",
   "main": "src/ScormApiWrapper.ts",
   "scripts": {
@@ -17,7 +17,7 @@
   "license": "MIT",
   "homepage": "https://github.com/szenadam/scorm-api-wrapper",
   "bugs": {
-    "url": "https://github.com/szenadam/scorm-api-wrapper",
+    "url": "https://github.com/szenadam/scorm-api-wrapper/issues",
     "email": "szenadam1@gmail.com"
   },
   "devDependencies": {
