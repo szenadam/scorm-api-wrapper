@@ -131,19 +131,19 @@ class ScormApiWrapper {
           if (completionStatus !== 'completed' && completionStatus !== 'passed') {
             switch (this.scormVersion) {
               case '1.2':
-                success = this.dataSet('cmi.core.exit', 'suspend');
+                this.dataSet('cmi.core.exit', 'suspend');
                 break;
               case '2004':
-                success = this.dataSet('cmi.exit', 'suspend');
+                this.dataSet('cmi.exit', 'suspend');
                 break;
             }
           } else {
             switch (this.scormVersion) {
               case '1.2':
-                success = this.dataSet('cmi.core.exit', 'logout');
+                this.dataSet('cmi.core.exit', 'logout');
                 break;
               case '2004':
-                success = this.dataSet('cmi.exit', 'normal');
+                this.dataSet('cmi.exit', 'normal');
                 break;
             }
           }
