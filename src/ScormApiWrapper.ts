@@ -31,7 +31,7 @@ class ScormApiWrapper {
    */
   public initialize(): boolean {
     let success: boolean | null = false;
-    let completionStatus = this.dataCompletionStatus;
+    let completionStatus: any;
     const traceMsgPrefix = 'ScormApiWrapper.initialize ';
 
     this.trace('initialize called.');
