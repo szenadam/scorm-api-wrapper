@@ -47,6 +47,7 @@ describe('Wrapper', () => {
       spyOn(wrapper, 'getApiHandle').and.returnValue({ Initialize: () => 'true' });
       spyOn(wrapper, 'getCode').and.returnValue(0);
       spyOn(wrapper, 'status').and.returnValue(true);
+      spyOn(wrapper, 'getStatus').and.returnValue('completed');
       spyOn(wrapper, 'save').and.returnValue(true);
 
       const result = wrapper.initialize();
@@ -467,6 +468,34 @@ describe('Wrapper', () => {
 
       expect(result).toEqual(false);
       expect(traceSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('getStatus', () => {
+    it('should get the status of the SCO when SCORM version is 1.2 and there was no error code', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      wrapper.scormVersion = '1.2';
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ LMSGetValue: () => 'completed' });
+      spyOn(wrapper, 'getCode').and.returnValue(0);
+
+      const result = wrapper.getStatus();
+
+      expect(result).toEqual('completed');
+      expect(wrapper.dataCompletionStatus).toEqual('completed');
+    });
+
+    it('should get the status of the SCO when SCORM version is 1.2 and there was no error code', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.connectionIsActive = true;
+      wrapper.scormVersion = '2004';
+      spyOn(wrapper, 'getApiHandle').and.returnValue({ GetValue: () => 'completed' });
+      spyOn(wrapper, 'getCode').and.returnValue(0);
+
+      const result = wrapper.getStatus();
+
+      expect(result).toEqual('completed');
+      expect(wrapper.dataCompletionStatus).toEqual('completed');
     });
   });
 

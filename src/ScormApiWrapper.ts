@@ -57,7 +57,7 @@ class ScormApiWrapper {
             this.connectionIsActive = true;
 
             if (this.handleCompletionStatus) {
-              completionStatus = this.status('get', '');
+              completionStatus = this.getStatus();
 
               if (completionStatus) {
                 switch (completionStatus) {
@@ -482,6 +482,24 @@ class ScormApiWrapper {
     }
 
     return success;
+  }
+
+  public getStatus(): string {
+    let status: string;
+
+    let cmi = '';
+    switch (this.scormVersion) {
+      case '1.2':
+        cmi = 'cmi.core.lesson_status';
+        break;
+      case '2004':
+        cmi = 'cmi.completion_status';
+        break;
+    }
+
+    status = this.dataGet(cmi);
+
+    return status;
   }
 
   /**
