@@ -63,7 +63,7 @@ class ScormApiWrapper {
                 switch (completionStatus) {
                   case 'not attempted':
                   case 'unknown':
-                    this.status('set', 'incomplete');
+                    this.setStatus('incomplete');
                     break;
                   // Additional options, presented here in case you'd like to use them
                   // case "completed"  : break;
@@ -446,44 +446,6 @@ class ScormApiWrapper {
     return success;
   }
 
-  public status(action: string, status: string): string | boolean {
-    let success: string | boolean = false;
-    const traceMsgPrefix = 'ScormApiWrapper.status failed';
-    let cmi = '';
-
-    if (action !== null) {
-      switch (this.scormVersion) {
-        case '1.2':
-          cmi = 'cmi.core.lesson_status';
-          break;
-        case '2004':
-          cmi = 'cmi.completion_status';
-          break;
-      }
-
-      switch (action) {
-        case 'get':
-          success = this.dataGet(cmi);
-          break;
-        case 'set':
-          if (status !== '') {
-            success = this.dataSet(cmi, status);
-          } else {
-            success = false;
-            this.trace(traceMsgPrefix + ': status was not specified.');
-          }
-          break;
-        default:
-          success = false;
-          this.trace(traceMsgPrefix + ': no valid action was specified.');
-      }
-    } else {
-      this.trace(traceMsgPrefix + ': action was not specified.');
-    }
-
-    return success;
-  }
-
   public getStatus(): string {
     let status: string;
 
@@ -500,6 +462,29 @@ class ScormApiWrapper {
     status = this.dataGet(cmi);
 
     return status;
+  }
+
+  public setStatus(status: string): boolean {
+    let success: boolean
+    let cmi = '';
+    const traceMsgPrefix = 'ScormApiWrapper.setStatus failed'
+    switch (this.scormVersion) {
+      case '1.2':
+        cmi = 'cmi.core.lesson_status';
+        break;
+      case '2004':
+        cmi = 'cmi.completion_status';
+        break;
+    }
+
+    if (status !== '') {
+      success = this.dataSet(cmi, status);
+    } else {
+      success = false;
+      this.trace(traceMsgPrefix + ': status was not specified.');
+    }
+
+    return success;
   }
 
   /**

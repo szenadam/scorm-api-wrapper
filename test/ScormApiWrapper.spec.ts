@@ -46,7 +46,6 @@ describe('Wrapper', () => {
       wrapper.handleCompletionStatus = true;
       spyOn(wrapper, 'getApiHandle').and.returnValue({ Initialize: () => 'true' });
       spyOn(wrapper, 'getCode').and.returnValue(0);
-      spyOn(wrapper, 'status').and.returnValue(true);
       spyOn(wrapper, 'getStatus').and.returnValue('completed');
       spyOn(wrapper, 'save').and.returnValue(true);
 
@@ -416,61 +415,6 @@ describe('Wrapper', () => {
     });
   });
 
-  describe('status', () => {
-    it('should return true when get action is successfully done on status', () => {
-      const wrapper = new ScormApiWrapper(false);
-      wrapper.scormVersion = '2004';
-      spyOn(wrapper, 'dataGet').and.returnValue('true');
-
-      const result = wrapper.status('get', 'status');
-
-      expect(result).toEqual('true');
-    });
-
-    it('should return true when set action is successfully done on status', () => {
-      const wrapper = new ScormApiWrapper(false);
-      wrapper.scormVersion = '2004';
-      spyOn(wrapper, 'dataSet').and.returnValue(true);
-
-      const result = wrapper.status('set', 'status');
-
-      expect(result).toEqual(true);
-    });
-
-    it('should return false and call trace if action is null', () => {
-      const wrapper = new ScormApiWrapper(false);
-      wrapper.scormVersion = '2004';
-      const traceSpy = spyOn(wrapper, 'trace');
-
-      const result = wrapper.status('', 'status');
-
-      expect(result).toEqual(false);
-      expect(traceSpy).toHaveBeenCalled();
-    });
-
-    it('should return false when action is "set" and status is null', () => {
-      const wrapper = new ScormApiWrapper(false);
-      wrapper.scormVersion = '2004';
-      const traceSpy = spyOn(wrapper, 'trace');
-
-      const result = wrapper.status('set', '');
-
-      expect(result).toEqual(false);
-      expect(traceSpy).toHaveBeenCalled();
-    });
-
-    it('should return false when action is neither "set" nor "get"', () => {
-      const wrapper = new ScormApiWrapper(false);
-      wrapper.scormVersion = '2004';
-      const traceSpy = spyOn(wrapper, 'trace');
-
-      const result = wrapper.status('foo', 'status');
-
-      expect(result).toEqual(false);
-      expect(traceSpy).toHaveBeenCalled();
-    });
-  });
-
   describe('getStatus', () => {
     it('should get the status of the SCO when SCORM version is 1.2 and there was no error code', () => {
       const wrapper = new ScormApiWrapper(false);
@@ -496,6 +440,30 @@ describe('Wrapper', () => {
 
       expect(result).toEqual('completed');
       expect(wrapper.dataCompletionStatus).toEqual('completed');
+    });
+  });
+
+  describe('setStatus', () => {
+    it('should set the completion status of the SCO when SCORM version is 1.2', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.scormVersion = '1.2';
+      const dataSetSpy = spyOn(wrapper, 'dataSet').and.returnValue(true);
+
+      const result = wrapper.setStatus('completed');
+
+      expect(result).toEqual(true);
+      expect(dataSetSpy).toHaveBeenCalledWith('cmi.core.lesson_status', 'completed');
+    });
+
+    it('should set the completion status of the SCO when SCORM version is 2004', () => {
+      const wrapper = new ScormApiWrapper(false);
+      wrapper.scormVersion = '2004';
+      const dataSetSpy = spyOn(wrapper, 'dataSet').and.returnValue(true);
+
+      const result = wrapper.setStatus('completed');
+
+      expect(result).toEqual(true);
+      expect(dataSetSpy).toHaveBeenCalledWith('cmi.completion_status', 'completed');
     });
   });
 
