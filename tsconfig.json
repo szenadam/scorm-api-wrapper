@@ -4,7 +4,7 @@
     "module": "CommonJS",
     "lib": ["ES6", "DOM"],
     "noImplicitAny": false,
-    "removeComments": true,
+    "removeComments": false,
     "outDir": "dist",
     "strict": true,
     "strictNullChecks": true,

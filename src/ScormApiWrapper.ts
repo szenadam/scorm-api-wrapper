@@ -1,14 +1,47 @@
 class ScormApiWrapper {
+  /**
+   * The API (SCORM 1.2) or API_1484_11 (SCORM 2004) object which contains the SCORM Runtime API.
+   */
   public apiHandle: any;
+
+  /**
+   * The SCORM Runtime version.
+   */
   public scormVersion: string;
 
+  /**
+   * Turn on/off logging in trace().
+   */
   public debugModeEnabled: boolean;
+
+  /**
+   * Should the wrapper handle completion status when running initialize().
+   */
   public handleCompletionStatus: boolean;
+
+  /**
+   * Should the wrapper handle exit mode when running terminate().
+   */
   public handleExitMode: boolean;
+
+  /**
+   * True is the wrapper did find the SCORM Runtime API.
+   */
   public apiIsFound: boolean;
+
+  /**
+   * Is the connection is active or not.
+   */
   public connectionIsActive: boolean;
 
+  /**
+   * Completion status value.
+   */
   public dataCompletionStatus: any;
+
+  /**
+   * Exit mode value.
+   */
   public dataExitStatus: any;
 
   constructor(debug: boolean) {
@@ -113,7 +146,7 @@ class ScormApiWrapper {
   }
 
   /**
-   * Tells the LMS to terminate the communication session
+   * Tells the LMS to terminate the communication session.
    */
   public terminate(): boolean {
     let success = false;
@@ -193,7 +226,8 @@ class ScormApiWrapper {
   }
 
   /**
-   * Looks for an object named API in parent and opener windows
+   * Looks for an object named API (SCORM 1.2) or API_1483_11 (SCORM 2004) in parent and opener windows.
+   *
    * @param win the window object
    */
   public findApi(win: any): any {
@@ -263,7 +297,7 @@ class ScormApiWrapper {
   }
 
   /**
-   * Looks for an object named API, first in the current window's frame
+   * Looks for an object named API (SCORM 1.2) or API_1483_11 (SCORM 2004), first in the current window's frame
    * hierarchy and then, if necessary, in the current window's opener window
    * hierarchy (if there is an opener window).
    */
@@ -295,7 +329,7 @@ class ScormApiWrapper {
   }
 
   /**
-   * Returns the handle to API object if it was previously set
+   * Returns the handle to API (SCORM 1.2) or API_1483_11 (SCORM 2004) object if it was previously set.
    */
   public getApiHandle(): any {
     if (!this.apiHandle && !this.apiIsFound) {
@@ -306,7 +340,7 @@ class ScormApiWrapper {
   }
 
   /**
-   * Requests the error code for the current error state from the LMS
+   * Requests the error code for the current error state from the LMS.
    */
   public getCode(): number {
     const API = this.getApiHandle();
@@ -336,6 +370,7 @@ class ScormApiWrapper {
    * (SCORM 2004) is requested.
    *  - Also sets class property dataExitStatus when "cmi.core.exit" (SCORM 1.2) or "cmi.exit"
    * (SCORM 2004) is requested.
+   *
    * @param {string} parameter parameter name of the SCORM data model element
    */
   public dataGet(parameter: string): string {
@@ -395,6 +430,7 @@ class ScormApiWrapper {
    * Also stores the SCO's completion status in a variable named
    * ScormApiWrapper.completionStatus. This variable is checked whenever
    * ScormApiWrapper.terminate() is invoked.
+   *
    * @param parameter {string} The data model element
    * @param value {string} The value for the data model element
    */
@@ -446,6 +482,11 @@ class ScormApiWrapper {
     return success;
   }
 
+  /**
+   * Get completion status value.
+   *
+   * @returns Current completion status value.
+   */
   public getStatus(): string {
     let status: string;
 
@@ -464,6 +505,12 @@ class ScormApiWrapper {
     return status;
   }
 
+  /**
+   * Set completion status.
+   *
+   * @param status completion status we want to set.
+   * @returns
+   */
   public setStatus(status: string): boolean {
     let success: boolean
     let cmi = '';
@@ -488,7 +535,7 @@ class ScormApiWrapper {
   }
 
   /**
-   * Instructs the LMS to persist all data to this point in the session
+   * Instructs the LMS to persist all data to this point in the session.
    */
   public save(): boolean {
     let success: boolean = false;
@@ -517,6 +564,7 @@ class ScormApiWrapper {
 
   /**
    * Displays error messages when in debug mode.
+   *
    * @param msg message to be displayed
    */
   public trace(msg: string): void {
@@ -532,6 +580,7 @@ class ScormApiWrapper {
   /**
    * "Used by a SCO to request the textual description for the error code
    * specified by the value of [errorCode]."
+   *
    * @param errorCode {number}
    */
   public getInfo(errorCode: number): string {
@@ -557,6 +606,7 @@ class ScormApiWrapper {
   /**
    * "Exists for LMS specific use. It allows the LMS to define additional
    * diagnostic information through the API Instance."
+   *
    * @param {number} errorCode
    */
   public getDiagnosticInfo(errorCode: number): string {
@@ -582,6 +632,7 @@ class ScormApiWrapper {
   /**
    * Converts 'boolean strings' into actual valid booleans.
    * (Most values returned from the API are the strings "true" and "false".)
+   *
    * @param value
    */
   public stringToBoolean(value: any): boolean {
