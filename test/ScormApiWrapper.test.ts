@@ -1,4 +1,3 @@
-import 'jasmine';
 import ScormApiWrapper from '../src/ScormApiWrapper';
 
 describe('Wrapper', () => {
