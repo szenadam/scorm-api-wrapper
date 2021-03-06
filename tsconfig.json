@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
+    "target": "ES5",
     "module": "CommonJS",
+    "lib": ["ES6", "DOM"],
     "noImplicitAny": false,
     "removeComments": true,
     "outDir": "dist",
@@ -8,5 +10,11 @@
     "strictNullChecks": true,
     "declaration": true
   },
-  "files": ["src/ScormApiWrapper.ts"]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "files": [
+    "src/ScormApiWrapper.ts"
+  ]
 }
