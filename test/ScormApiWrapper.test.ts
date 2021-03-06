@@ -24,7 +24,7 @@ describe('Wrapper', () => {
       const wrapper = new ScormApiWrapper(true);
 
       // Assert
-      expect(wrapper.handleCompletionStatus).toBeTrue();
+      expect(wrapper.handleCompletionStatus).toBeTruthy();
     });
 
     it('should set handleExitMode to true initially', () => {
@@ -32,7 +32,7 @@ describe('Wrapper', () => {
       const wrapper = new ScormApiWrapper(true);
 
       // Assert
-      expect(wrapper.handleExitMode).toBeTrue();
+      expect(wrapper.handleExitMode).toBeTruthy();
     });
 
     it('should set apiHandle to null initially', () => {
@@ -48,7 +48,7 @@ describe('Wrapper', () => {
       const wrapper = new ScormApiWrapper(true);
 
       // Assert
-      expect(wrapper.apiIsFound).toBeFalse();
+      expect(wrapper.apiIsFound).toBeFalsy();
     });
 
     it('should set connectionIsActive to false initially', () => {
@@ -56,7 +56,7 @@ describe('Wrapper', () => {
       const wrapper = new ScormApiWrapper(true);
 
       // Assert
-      expect(wrapper.connectionIsActive).toBeFalse();
+      expect(wrapper.connectionIsActive).toBeFalsy();
     });
   });
 
@@ -75,8 +75,8 @@ describe('Wrapper', () => {
       const result = wrapper.initialize();
 
       // Assert
-      expect(result).toBeTrue();
-      expect(wrapper.connectionIsActive).toBeTrue();
+      expect(result).toBeTruthy();
+      expect(wrapper.connectionIsActive).toBeTruthy();
     });
 
     it('should return false and call trace when already initialized', () => {
@@ -88,7 +88,7 @@ describe('Wrapper', () => {
       const result = wrapper.initialize();
 
       // Assert
-      expect(result).toBeFalse();
+      expect(result).toBeFalsy();
       expect(traceSpy).toHaveBeenCalled();
     });
   });
@@ -108,7 +108,7 @@ describe('Wrapper', () => {
       const result = wrapper.terminate();
 
       // Assert
-      expect(result).toBeTrue();
+      expect(result).toBeTruthy();
     });
   });
 
@@ -121,7 +121,7 @@ describe('Wrapper', () => {
       const result = wrapper.isAvailable();
 
       // Assert
-      expect(result).toBeTrue();
+      expect(result).toBeTruthy();
     });
   });
 
@@ -462,7 +462,7 @@ describe('Wrapper', () => {
       const result = wrapper.dataSet('parameter', 'value');
 
       // Assert
-      expect(result).toBeTrue();
+      expect(result).toBeTruthy();
     });
 
     it('should return false when data set call was unsuccessful', () => {
@@ -478,7 +478,7 @@ describe('Wrapper', () => {
       const result = wrapper.dataSet('parameter', 'value');
 
       // Assert
-      expect(result).toBeFalse();
+      expect(result).toBeFalsy();
     });
 
     it('should return false and call trace function when connection is not active', () => {
@@ -490,7 +490,7 @@ describe('Wrapper', () => {
       const result = wrapper.dataSet('parameter', 'value');
 
       // Assert
-      expect(result).toBeFalse();
+      expect(result).toBeFalsy();
       expect(traceSpy).toHaveBeenCalled();
     });
 
@@ -504,7 +504,7 @@ describe('Wrapper', () => {
       const result = wrapper.dataSet('parameter', 'value');
 
       // Assert
-      expect(result).toBeFalse();
+      expect(result).toBeFalsy();
       expect(traceSpy).toHaveBeenCalled();
     });
 
@@ -600,7 +600,7 @@ describe('Wrapper', () => {
       const result = wrapper.save();
 
       // Assert
-      expect(result).toBeTrue();
+      expect(result).toBeTruthy();
     });
 
     it('should return false if connection is not active', () => {
@@ -612,7 +612,7 @@ describe('Wrapper', () => {
       const result = wrapper.save();
 
       // Assert
-      expect(result).toBeFalse();
+      expect(result).toBeFalsy();
       expect(traceSpy).toHaveBeenCalled();
     });
 
@@ -626,7 +626,7 @@ describe('Wrapper', () => {
       const result = wrapper.save();
 
       // Assert
-      expect(result).toBeFalse();
+      expect(result).toBeFalsy();
       expect(traceSpy).toHaveBeenCalled();
     });
   });
@@ -748,7 +748,7 @@ describe('Wrapper', () => {
       const result = wrapper.stringToBoolean(String('true'));
 
       // Assert
-      expect(result).toBeTrue();
+      expect(result).toBeTruthy();
     });
 
     it('should return false when input is a String object with "false"', () => {
@@ -759,7 +759,7 @@ describe('Wrapper', () => {
       const result = wrapper.stringToBoolean(String('false'));
 
       // Assert
-      expect(result).toBeFalse();
+      expect(result).toBeFalsy();
     });
 
     it('should return boolean inputs with same value', () => {
@@ -768,9 +768,9 @@ describe('Wrapper', () => {
 
       // Act, Assert
       let result = wrapper.stringToBoolean(true);
-      expect(result).toBeTrue();
+      expect(result).toBeTruthy();
       result = wrapper.stringToBoolean(false);
-      expect(result).toBeFalse();
+      expect(result).toBeFalsy();
     });
 
     it('should return false for the number zero', () => {
@@ -781,7 +781,7 @@ describe('Wrapper', () => {
       const result = wrapper.stringToBoolean(0);
 
       // Assert
-      expect(result).toBeFalse();
+      expect(result).toBeFalsy();
     });
 
     it('should return true for any non-zero integers', () => {
@@ -790,9 +790,9 @@ describe('Wrapper', () => {
 
       // Act, Assert
       let result = wrapper.stringToBoolean(1);
-      expect(result).toBeTrue();
+      expect(result).toBeTruthy();
       result = wrapper.stringToBoolean(-1);
-      expect(result).toBeTrue();
+      expect(result).toBeTruthy();
     });
 
     it('should return null for undefined value', () => {
@@ -803,7 +803,7 @@ describe('Wrapper', () => {
       const result = wrapper.stringToBoolean(undefined);
 
       // Assert
-      expect(result).toBeFalse();
+      expect(result).toBeFalsy();
     });
   });
 });
