@@ -4,10 +4,12 @@
 
 A modernized reimplementation of the SCORM API Wrapper inspired by
 [pipwerks/scorm-api-wrapper](https://github.com/pipwerks/scorm-api-wrapper).
+It works with the SCORM 1.2 and SCORM 2004 Runtime.
 
 ## Requirements
 
-- Nodejs >= 10
+- Nodejs 10+
+- npm 6+
 
 ## Build
 
@@ -28,10 +30,10 @@ Contributions are welcomed.
 
 ### v1.1.0
 
-- Rename functions to be more readable
-- Fix log messages to reflect the new code
-- Fix Karma reporter to show test results
-- Type check test builds with base tsconfig
+- Rename functions to be more readable.
+- Fix log messages to reflect the new code.
+- Fix Karma reporter to show test results.
+- Type check test builds with base tsconfig.
 - Modify functions to have only one return type to allow strict null check.
 
 ### v1.0.0

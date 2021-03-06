@@ -1,7 +1,7 @@
 The MIT License (MIT)
 =====================
 
-Copyright © `2020` `szenadam`
+Copyright © `2021` `szenadam`
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
