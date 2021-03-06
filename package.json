@@ -1,12 +1,12 @@
 {
-  "name": "scorm-api-wrapper",
+  "name": "@szenadam/scorm-api-wrapper",
   "version": "1.1.0",
   "description": "SCORM API Wrapper",
-  "main": "src/ScormApiWrapper.ts",
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "lint": "tslint --project ."
+    "lint": "tslint --project .",
+    "prepublish": "tsc"
   },
   "author": "szenadam",
   "repository": {
@@ -19,6 +19,8 @@
     "url": "https://github.com/szenadam/scorm-api-wrapper/issues",
     "email": "szenadam1@gmail.com"
   },
+  "main": "dist/ScormApiWrapper.js",
+  "types": "dist/ScormApiWrapper.d.ts",
   "devDependencies": {
     "@babel/core": "^7.13.8",
     "@babel/preset-env": "^7.13.9",
