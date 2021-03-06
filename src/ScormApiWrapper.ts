@@ -2,47 +2,47 @@ class ScormApiWrapper {
   /**
    * The API (SCORM 1.2) or API_1484_11 (SCORM 2004) object which contains the SCORM Runtime API.
    */
-  public apiHandle: any;
+  private apiHandle: any;
 
   /**
    * The SCORM Runtime version.
    */
-  public scormVersion: string;
+  private scormVersion: string;
 
   /**
    * Turn on/off logging in trace().
    */
-  public debugModeEnabled: boolean;
+  private debugModeEnabled: boolean;
 
   /**
    * Should the wrapper handle completion status when running initialize().
    */
-  public handleCompletionStatus: boolean;
+  private handleCompletionStatus: boolean;
 
   /**
    * Should the wrapper handle exit mode when running terminate().
    */
-  public handleExitMode: boolean;
+  private handleExitMode: boolean;
 
   /**
    * True is the wrapper did find the SCORM Runtime API.
    */
-  public apiIsFound: boolean;
+  private apiIsFound: boolean;
 
   /**
    * Is the connection is active or not.
    */
-  public connectionIsActive: boolean;
+  private connectionIsActive: boolean;
 
   /**
    * Completion status value.
    */
-  public dataCompletionStatus: any;
+  private dataCompletionStatus: any;
 
   /**
    * Exit mode value.
    */
-  public dataExitStatus: any;
+  private dataExitStatus: any;
 
   constructor(debug: boolean) {
     this.debugModeEnabled = debug;
