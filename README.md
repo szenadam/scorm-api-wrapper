@@ -28,6 +28,11 @@ Contributions are welcomed.
 
 ## Changelog
 
+### v1.1.1
+
+- Replace karma/jasmine framework to babel/jest.
+- Set all properties in wrapper to private.
+
 ### v1.1.0
 
 - Rename functions to be more readable.

@@ -1,13 +1,13 @@
 {
   "name": "@szenadam/scorm-api-wrapper",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "SCORM API Wrapper",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
     "test": "jest",
     "lint": "tslint --project .",
-    "prepublish": "tsc"
+    "prepublish": "npm run build"
   },
   "author": "szenadam",
   "repository": {
@@ -20,6 +20,15 @@
     "url": "https://github.com/szenadam/scorm-api-wrapper/issues",
     "email": "szenadam1@gmail.com"
   },
+  "keywords": [
+    "SCORM",
+    "eLearning",
+    "api-wrapper",
+    "wrapper",
+    "SCORM 2004",
+    "SCORM 1.2",
+    "SCORM RTE"
+  ],
   "main": "dist/ScormApiWrapper.js",
   "types": "dist/ScormApiWrapper.d.ts",
   "devDependencies": {
